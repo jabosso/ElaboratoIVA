@@ -5,11 +5,16 @@ import body_dictionary as body_dic
 body = body_dic.body()
 
 def csv_to_matrix(path,int_path):
+    #input:
+        #path:path of file csv with landmarks
+        #int_path: path of file txt with interest point
+    #output:
+            #b: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
     a=[]
-    interest =[]
+    interest=[]
     temp =open(int_path,'r')
-    for element in temp :
-        interest.append(element)
+    for elem in temp:
+        interest.append(elem)
     with open(path,'r') as fin :
         reader = csv.reader(fin)
         for row in reader:
@@ -36,19 +41,22 @@ def csv_to_matrix(path,int_path):
                 b[i][j][1] = None
     return b
 def body_space(body_matrix):
+    #input:
+        #body_matrix: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
+    #output:
+            #max, min: two tuples for max and min values on x and y
     max_a = np.nanmax(body_matrix, axis=1)
-    print(max_a.shape)
     max = np.nanmax(max_a, axis=0)
     min_a = np.nanmin(body_matrix,axis=1)
     min =np.nanmin(min_a,axis=0)
     return max, min
-
 giovi_path='move/arms_warmup/giovi.csv'
 bobo_path ='move/arms_warmup/bobo.csv'
 interest_path = 'move/arms_warmup/interest_point.txt'
 
 giovi_matrix = csv_to_matrix(giovi_path,interest_path)
 bobo_matrix = csv_to_matrix(bobo_path,interest_path)
-max, min = body_space(giovi_matrix)
-print(max, min)
+maxG, minG = body_space(giovi_matrix)
+maxB, minB= body_space(bobo_matrix)
+
 
