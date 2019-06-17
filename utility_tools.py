@@ -8,11 +8,13 @@ import body_dictionary as body_dic
 body = body_dic.body()
 
 def csv_to_matrix(path, int_path):
-    # input:
-    #      path:path of file csv with landmarks
-    #      int_path: path of file txt with interest point
-    # output:
-    #      b: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
+    """
+
+    :param path: path of file csv with landmarks
+    :param int_path: path of file txt with interest point
+    :return:  matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
+    """
+
     a = []
     interest = []
     temp = open(int_path, 'r')
@@ -46,8 +48,11 @@ def csv_to_matrix(path, int_path):
 
 
 def let_me_see(matrix):
-    # input:
-    # matrix: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
+    """
+
+    :param matrix: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
+    """
+
     connection = [(0, 1), (1, 2), (2, 3), (3, 4), (1, 5), (5, 6), (6, 7),
                   (1, 8), (8, 9), (9, 10), (10, 11), (8, 12), (12, 13), (13, 14)]
     color = [(255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0),
