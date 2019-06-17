@@ -7,7 +7,6 @@ import body_dictionary as body_dic
 
 body = body_dic.body()
 
-
 def csv_to_matrix(path, int_path):
     # input:
     #      path:path of file csv with landmarks
@@ -46,49 +45,6 @@ def csv_to_matrix(path, int_path):
     return b
 
 
-def body_space(body_matrix):
-    # input:
-    #      body_matrix: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
-    # output:
-    #      max, min: two tuples for max and min values on x and y
-    max_a = np.nanmax(body_matrix, axis=1)
-    max_xy = np.nanmax(max_a, axis=0)
-    min_a = np.nanmin(body_matrix, axis=1)
-    min_xy = np.nanmin(min_a, axis=0)
-    return max_xy, min_xy
-
-
-def linear_transform(matrix, max_xy, min_xy):
-    # input:
-    #      matrix: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
-    #      max : tupla of max_x and max_y
-    #      min : tupla of min_x and min_y
-    # output:
-    #      matrix: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
-    dist_x = max_xy[0] - min_xy[0]
-    dist_y = max_xy[1] - min_xy[1]
-    new_dimension = 600
-    if dist_x > dist_y:
-        old_dimension = dist_x
-    else:
-        old_dimension = dist_y
-    for i in range(matrix.shape[0]):
-        for j in range(matrix.shape[1]):
-            if not math.isnan(matrix[i][j][0]):
-                print(matrix[i][j])
-                matrix[i][j][0] = int((matrix[i][j][0]/old_dimension)*new_dimension)
-            if not math.isnan(matrix[i][j][1]):
-                matrix[i][j][1] = int((matrix[i][j][1]/old_dimension)*new_dimension)
-    for i in range(matrix.shape[0]):
-        for j in range(matrix.shape[1]):
-            # print(matrix[i][j])
-            if not math.isnan(matrix[i][j][0]):
-                matrix[i][j][0] = matrix[i][j][0] - min_xy[0]
-            if not math.isnan(matrix[i][j][1]):
-                matrix[i][j][1] = matrix[i][j][1] - min_xy[1]
-    return matrix
-
-
 def let_me_see(matrix):
     # input:
     # matrix: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
@@ -122,13 +78,4 @@ def let_me_see(matrix):
             break;
 
 
-giovi_path = 'move/arms_warmup/giovi.csv'
-bobo_path = 'move/arms_warmup/bobo.csv'
-interest_path = 'move/arms_warmup/interest_point.txt'
 
-giovi_matrix = csv_to_matrix(giovi_path, interest_path)
-bobo_matrix = csv_to_matrix(bobo_path, interest_path)
-maxG, minG = body_space(giovi_matrix)
-maxB, minB = body_space(bobo_matrix)
-poldo = linear_transform(bobo_matrix, maxB, minB)
-let_me_see(poldo)

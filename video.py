@@ -12,7 +12,10 @@ params["model_folder"] = "models/"
 opWrapper = op.WrapperPython()
 opWrapper.configure(params)
 opWrapper.start()
-src = "data/bobo.webm"
+src = "data/giovi_angle0.mp4"
+output_n = src.replace('data/', 'move/')
+output_n = output_n.replace('.mp4', '.csv')
+print(output_n)
 cap = cv2.VideoCapture(src)
 datum = op.Datum()
 
@@ -20,7 +23,7 @@ datum = op.Datum()
    
 
 j=0
-with open('outpoints.csv',mode='w') as fin:
+with open(output_n,mode='w') as fin:
     while(True):
         ret, frame = cap.read()  
         dataout = []   
