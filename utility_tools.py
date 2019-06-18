@@ -83,4 +83,49 @@ def let_me_see(matrix):
             break;
 
 
+def let_me_see2(matrix,b):
+    """
+
+    :param matrix: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
+    """
+
+    connection = [(0, 1), (1, 2), (2, 3), (3, 4), (1, 5), (5, 6), (6, 7),
+                  (1, 8), (8, 9), (9, 10), (10, 11), (8, 12), (12, 13), (13, 14)]
+    color = [(255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0),
+             (0, 128, 255), (255, 128, 0), (128, 0, 255), (255, 0, 255), (255, 0, 128),
+             (255, 0, 64), (0, 128, 255), (0, 230, 0), (128, 0, 255), (251, 49, 229),
+             (255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0),
+             (0, 128, 255), (255, 128, 0), (128, 0, 255), (255, 0, 255), (255, 0, 128)
+             ]
+    for i in range(matrix.shape[0]):
+        bframe = np.zeros((650, 650, 3), np.uint8)
+        overlay = bframe
+        for j in range(matrix.shape[1]):
+            if (not math.isnan(matrix[i][j][0])) and (not math.isnan(matrix[i][j][0])):
+                x = int(matrix[i][j][0])
+                y = int(matrix[i][j][1])
+                cv2.circle(overlay, (x, y), 5, color[j], -1)
+        for element in connection:
+            if (not math.isnan(matrix[i][element[0]][0])) and (not math.isnan(matrix[i][element[1]][0])):
+                point_a = (int(matrix[i][element[0]][0]), int(matrix[i][element[0]][1]))
+                point_b = (int(matrix[i][element[1]][0]), int(matrix[i][element[1]][1]))
+                cv2.line(overlay, point_a, point_b, color[1],4)
+
+        for j in range(b.shape[1]):
+            if (not math.isnan(b[i][j][0])) and (not math.isnan(b[i][j][0])):
+                x = int(b[i][j][0])
+                y = int(b[i][j][1])
+                cv2.circle(bframe, (x, y), 5, color[j], -1)
+        for element in connection:
+            if (not math.isnan(b[i][element[0]][0])) and (not math.isnan(b[i][element[1]][0])):
+                point_a = (int(b[i][element[0]][0]), int(b[i][element[0]][1]))
+                point_b = (int(b[i][element[1]][0]), int(b[i][element[1]][1]))
+                cv2.line(bframe, point_a, point_b, color[5],4)
+        alpha = 0.3
+        cv2.addWeighted(overlay, alpha, bframe, 1 - alpha,0, bframe)
+        cv2.imshow('output', bframe)
+        time.sleep(0.17)
+        k = cv2.waitKey(1)
+        if k == 27:
+            break;
 

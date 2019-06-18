@@ -100,3 +100,11 @@ def rotate_around_point_highperf(point, angle, origin):
     qy = offset_y + -sin_rad * adjusted_x + cos_rad * adjusted_y
 
     return qx, qy
+
+
+def linear_transformation(matrix, rotation_ref=(1,5)):
+    matrix = rotation_function(matrix,rotation_ref)
+    maxT, minT = body_space(matrix)
+    matrix, box_dim = shift_function(matrix, maxT, minT)
+    matrix = scale_function(matrix, box_dim)
+    return matrix
