@@ -12,7 +12,7 @@ params["model_folder"] = "models/"
 opWrapper = op.WrapperPython()
 opWrapper.configure(params)
 opWrapper.start()
-src = "data/sarra.mp4"
+src = "data/bianca.mp4"
 
 output_n = src.replace('data/', 'move/')
 output_n = output_n.replace('.mp4', '.csv')
