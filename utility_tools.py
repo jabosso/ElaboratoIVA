@@ -205,6 +205,7 @@ def sincro(path):
     a.append(index)
     index = -1
     old = 0
+
     for i in range(npath.shape[1]):
         if old == npath[1][i]:
             index = index + 1
@@ -215,6 +216,7 @@ def sincro(path):
     b.append(index)
     i = 0
     old = -1
+
     while (i < len(a) and i < len(b)):
         if a[i] > b[i]:
             if b[i] > old:
@@ -232,10 +234,16 @@ def sincro(path):
             i = i + 1
     if len(a) > len(b):
         for h in range(i, len(a)):
-            c.append([path[0][a[h]], path[1][a[h]]])
+            if a[h]> old :
+                c.append([path[0][a[h]], path[1][a[h]]])
+                old = a[h]
     elif len(a) < len(b):
         for h in range(i, len(b)):
-            c.append([path[0][b[h]], path[1][b[h]]])
+            if b[h]> old:
+                c.append([path[0][b[h]], path[1][b[h]]])
+                old = b[h]
+    c.append(c[len(c)-1])
+    c.append(c[len(c)-1])
     return c
 
 
@@ -261,8 +269,9 @@ def let_me_see_sicro(matrix1, matrix2, path):
             cv2.circle(overlay, (x, y), 5, (0, 255, 0), -1)
         alpha = 0.3
         cv2.addWeighted(overlay, alpha, bframe, 1 - alpha, 0, bframe)
+        time.sleep(0.5)
         cv2.imshow('output', bframe)
-        time.sleep(0.13)
+        time.sleep(0.5)
         k = cv2.waitKey(1)
         if k == 27:
             break;
@@ -278,9 +287,9 @@ def visualize(cost, path, x, y):
     plt.imshow(cost.T, origin='lower', cmap=plt.cm.Reds, interpolation='nearest')
 
     plt.plot(path[0], path[1], '-o')  # relation
-    plt.xticks(range(len(x)), x)
-    plt.yticks(range(len(y)), y)
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.axis('tight')
+    #plt.xticks(range(len(x)), x)
+    #plt.yticks(range(len(y)), y)
+    #plt.xlabel('x')
+    #plt.ylabel('y')
+    #plt.axis('tight')
     plt.show()

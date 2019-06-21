@@ -30,9 +30,17 @@ nicco, bianca = compare_two_movements(nicco, bianca)
 # let_me_see_two_movements(nicco, bianca)
 
 v = cycle_identify(nicco)
-print(v)
+spl_mat = []
+for i in range(len(v)-1):
+    start = int(v[i])
+    end =int( v[i+1])
+    matr = nicco[start:end]
+    print(nicco.shape, matr.shape)
+    spl_mat.append(matr)
 
-dist, cost, acc, path = dtw(nicco, bianca)
-
+dist, cost, acc, path = dtw(spl_mat[0], spl_mat[1])
+visualize(cost,path,spl_mat[0], spl_mat[1])
 path = sincro(path)
-let_me_see_sicro(nicco, bianca, path)
+#let_me_see(spl_mat[1])
+print(path)
+let_me_see_sicro(spl_mat[0], spl_mat[1], path)
