@@ -74,7 +74,6 @@ def rotation_function(matrix, rot_ref):
     s_y = point_a[1] - point_b[1]
     ip = math.sqrt((point_a[0] - point_b[0]) ** 2 + (point_a[1] - point_b[1]) ** 2)
     angle = math.asin(s_y / ip)
-    print(point_a, point_b, ip, angle)
     for i in range(matrix.shape[0]):
         for j in range(matrix.shape[1]):
             if (not math.isnan(matrix[i][j][0])) and (not math.isnan(matrix[i][j][0])):

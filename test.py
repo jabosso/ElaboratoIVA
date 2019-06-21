@@ -1,6 +1,8 @@
 from linear_transformation import *
 from utility_tools import *
-
+from scipy.spatial.distance import cdist
+from time_tools import *
+from dtw import dtw
 
 giovi_path = 'move/arms_warmup/giovi_angle0.csv'
 bobo_path = 'move/arms_warmup/bobo.csv'
@@ -15,11 +17,22 @@ sarra_matrix = csv_to_matrix(sarra_path, interest_path)
 nicco_matrix = csv_to_matrix(nicco_path, interest_path)
 bianca_matrix = csv_to_matrix(bianca_path, interest_path)
 
-
 giovi = linear_transformation(giovi_matrix)
 bobo = linear_transformation(bobo_matrix)
 sarra = linear_transformation(sarra_matrix)
 nicco = linear_transformation(nicco_matrix)
 bianca = linear_transformation(bianca_matrix)
 
-let_me_see2(nicco,bianca)
+# giovi,bobo=compare_two_movements(giovi,bobo)
+# sarra,nicco=compare_two_movements(sarra,nicco)
+nicco, bianca = compare_two_movements(nicco, bianca)
+
+# let_me_see_two_movements(nicco, bianca)
+
+v = cycle_identify(nicco)
+print(v)
+
+dist, cost, acc, path = dtw(nicco, bianca)
+
+path = sincro(path)
+let_me_see_sicro(nicco, bianca, path)
