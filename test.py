@@ -3,7 +3,7 @@ from utility_tools import *
 from scipy.spatial.distance import cdist
 from time_tools import *
 from dtw import dtw
-
+from statistic import *
 giovi_path = 'move/arms_warmup/giovi_angle0.csv'
 bobo_path = 'move/arms_warmup/bobo.csv'
 sarra_path = 'move/arms_warmup/sarra.csv'
@@ -35,12 +35,21 @@ for i in range(len(v)-1):
     start = int(v[i])
     end =int( v[i+1])
     matr = nicco[start:end]
-    print(nicco.shape, matr.shape)
     spl_mat.append(matr)
-
+matrix_to_csv(spl_mat[0],'arms_warmup')
 dist, cost, acc, path = dtw(spl_mat[0], spl_mat[1])
-visualize(cost,path,spl_mat[0], spl_mat[1])
+#visualize(cost,path,spl_mat[0], spl_mat[1])
 path = sincro(path)
 #let_me_see(spl_mat[1])
-print(path)
+sdc_list =[]
+for i in range(len(spl_mat)-1):
+    dist, cost, acc, path = dtw(spl_mat[0], spl_mat[i+1])
+    path = sincro(path)
+    sdc = variance(path,spl_mat[0],spl_mat[i+1])
+    sdc_list.append(sdc)
+sdc_np = np.asarray(sdc_list)
+max_sdc = np.max(sdc_np,axis =0)
+for elemnt in max_sdc :
+    print(np.arccos(elemnt))
+array_to_csv(max_sdc,'arms_warmup_weight')
 let_me_see_sicro(spl_mat[0], spl_mat[1], path)

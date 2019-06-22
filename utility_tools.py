@@ -56,6 +56,11 @@ def csv_to_matrix(path, int_path):
                 b[i][j][0] = None
                 b[i][j][1] = None
     return b
+def array_to_csv(v, name_file):
+    with open('move/models/'+ name_file + '.csv', mode='w') as employee_file:
+        employee_writer = csv.writer(employee_file, delimiter=',', quoting=csv.QUOTE_NONE)
+        employee_writer.writerow(v)
+
 
 
 def matrix_to_csv(matrix, name_file):
@@ -63,7 +68,7 @@ def matrix_to_csv(matrix, name_file):
     :param matrix: matrix to convert in file csv
     :param name_file: part of name file csv
     """
-    with open('matrix_to_csv_' + name_file + '.csv', mode='w') as employee_file:
+    with open('move/models/'+ name_file + '.csv', mode='w') as employee_file:
         employee_writer = csv.writer(employee_file, delimiter=',', quoting=csv.QUOTE_NONE)
         for i in range(matrix.shape[0]):
             employee_writer.writerow(matrix[i])
@@ -110,7 +115,7 @@ def compare_two_movements(matrix1, matrix2):
     :return two matrix with element no nan
     """
     matrix1 = transform_matrix_noNan(matrix1, 0)
-    matrix2 = transform_matrix_noNan(matrix2, 1)
+    matrix2 = transform_matrix_noNan(matrix2, 0)
     return matrix1, matrix2
 
 
