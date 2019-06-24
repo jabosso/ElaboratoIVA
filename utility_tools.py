@@ -58,6 +58,7 @@ def csv_to_matrix(path, int_path):
     return b
 
 def funzion(m,int_path):
+
     interest = []
     temp = open(int_path, 'r')
     for elem in temp:

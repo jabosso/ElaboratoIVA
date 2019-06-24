@@ -3,3 +3,4 @@ ivaenv/
 __pycache__/
 models/
 .idea/
+nogit.py
