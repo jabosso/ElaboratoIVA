@@ -16,7 +16,7 @@ bobo_matrix = csv_to_matrix(bobo_path, interest_path)
 sarra_matrix = csv_to_matrix(sarra_path, interest_path)
 nicco_matrix = csv_to_matrix(nicco_path, interest_path)
 bianca_matrix = csv_to_matrix(bianca_path, interest_path)
-
+print(giovi_matrix.shape)
 giovi = linear_transformation(giovi_matrix)
 bobo = linear_transformation(bobo_matrix)
 sarra = linear_transformation(sarra_matrix)
@@ -36,6 +36,8 @@ for i in range(len(v)-1):
     end =int( v[i+1])
     matr = nicco[start:end]
     spl_mat.append(matr)
+print('qui')
+print(spl_mat[0].shape)
 matrix_to_csv(spl_mat[0],'arms_warmup')
 dist, cost, acc, path = dtw(spl_mat[0], spl_mat[1])
 #visualize(cost,path,spl_mat[0], spl_mat[1])

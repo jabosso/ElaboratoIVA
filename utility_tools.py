@@ -43,9 +43,9 @@ def csv_to_matrix(path, int_path):
         for body_part in interest:
             part = body_part.replace('\n', '')
             i = int(body.dictionary[part])
-            if element[i][1] != '' and element[i][2] != '':
-                b[j][i][0] = int(element[i][1])
-                b[j][i][1] = int(element[i][2])
+            if element[i][0] != '' and element[i][1] != '':
+                b[j][i][0] = int(element[i][0].replace("'",''))
+                b[j][i][1] = int(element[i][1])
             else:
                 b[j][i][0] = None
                 b[j][i][1] = None
@@ -56,6 +56,35 @@ def csv_to_matrix(path, int_path):
                 b[i][j][0] = None
                 b[i][j][1] = None
     return b
+
+def funzion(m,int_path):
+    interest = []
+    temp = open(int_path, 'r')
+    for elem in temp:
+        interest.append(elem)
+    b = np.zeros(shape=(m.shape[0], m.shape[1], 2))
+    j = 0
+    for element in m:
+        for body_part in interest:
+            part = body_part.replace('\n', '')
+            print(part)
+            i = int(body.dictionary[part])
+            if element[i][0] != '' and element[i][1] != '':
+                b[j][i][0] = int(element[i][0])
+                b[j][i][1] = int(element[i][1])
+            else:
+                b[j][i][0] = None
+                b[j][i][1] = None
+        j = j + 1
+    for i in range(b.shape[0]):
+        for j in range(b.shape[1]):
+            if b[i][j][0] == 0 and b[i][j][1] == 0:
+                b[i][j][0] = None
+                b[i][j][1] = None
+    return b
+
+
+
 def array_to_csv(v, name_file):
     with open('move/models/'+ name_file + '.csv', mode='w') as employee_file:
         employee_writer = csv.writer(employee_file, delimiter=',', quoting=csv.QUOTE_NONE)
@@ -68,10 +97,11 @@ def matrix_to_csv(matrix, name_file):
     :param matrix: matrix to convert in file csv
     :param name_file: part of name file csv
     """
-    with open('move/models/'+ name_file + '.csv', mode='w') as employee_file:
+    with open('move/models/'+ name_file +'/model.csv', mode='w') as employee_file:
         employee_writer = csv.writer(employee_file, delimiter=',', quoting=csv.QUOTE_NONE)
         for i in range(matrix.shape[0]):
-            employee_writer.writerow(matrix[i])
+            for j in range(matrix.shape[1]):
+                employee_writer.writerow(int(matrix[i][j]))
 
 
 '''
@@ -298,3 +328,15 @@ def visualize(cost, path, x, y):
     #plt.ylabel('y')
     #plt.axis('tight')
     plt.show()
+
+
+def get_model(in_str):
+    weight =[]
+    interest_path = 'move/models/'+in_str+'/interest_point.txt'
+    model =csv_to_matrix('move/models/'+in_str+'/model.csv',interest_path)
+    with open('move/models/'+in_str+'/weight.csv', 'r') as fin:
+        reader = csv.reader(fin)
+        for row in reader:
+            weight.append(row)
+
+    return model, np.asarray(weight)
