@@ -4,6 +4,12 @@ from scipy.spatial.distance import cdist
 
 
 def choosen_point(M):
+    """
+    Goal: determinate the point to max variance
+
+    :param M: dataframe
+    :return: point to max variance
+    """
     dist = np.zeros((M.shape[1]))
     for i in range(M.shape[1]):
         dist_b = np.zeros((M.shape[0]))
@@ -22,6 +28,12 @@ def choosen_point(M):
 
 
 def cycle_identify(matrix):
+    """
+    Goal:
+
+    :param matrix:
+    :return:
+    """
     p = choosen_point(matrix)
     M = matrix[:, p]
     c_M = cdist(M, M)
@@ -39,3 +51,18 @@ def cycle_identify(matrix):
         midpoints.append((temp[i + 1] + temp[i]) / 2)
     return midpoints
 
+def generate_cycle_model(matrix, mid_points):
+    """
+    Goal:generate one dataframe for any cycle
+
+    :param matrix:
+    :param mid_points:
+    :return
+    """
+    spl_mat = []
+    for i in range(len(mid_points) - 1):
+        start = int(mid_points[i])
+        end = int(mid_points[i + 1])
+        matr = matrix[start:end]
+        spl_mat.append(matr)
+    return spl_mat

@@ -33,10 +33,10 @@ print("{}".format(args["video"]))
 
 #print(model.shape, model_w.shape)
 matrix =video_to_matrix(args["video"])
+user_matrix = linear_transformation(matrix)
 #matrix_to_csv(matrix,'user')
-data=create_dataframe(matrix,['frame','x','y','score'])
+data=create_dataframe(user_matrix,['frame','x','y','score'])
 data=add_body_parts(data,body.dictionary)
 data = remove_not_interest_point(data,interest_path)
 
-user_input = linear_transformation(data)
 model , model_w = get_model(ex)

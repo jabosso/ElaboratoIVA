@@ -5,28 +5,28 @@ from time_tools import *
 from dtw import dtw
 from statistic import *
 
-giovi_path = 'move/models/ArmsWarmUp/giovi_angle0.csv'
-bobo_path = 'move/models/ArmsWarmUp/bobo.csv'
-sarra_path = 'move/models/ArmsWarmUp/sarra.csv'
-nicco_path = 'move/models/ArmsWarmUp/nicco.csv'
-bianca_path = 'move/models/ArmsWarmUp/bianca.csv'
+# giovi_path = 'move/models/ArmsWarmUp/giovi_angle0.csv'
+# bobo_path = 'move/models/ArmsWarmUp/bobo.csv'
+# sarra_path = 'move/models/ArmsWarmUp/sarra.csv'
+#nicco_path = 'move/models/ArmsWarmUp/complete/nicco.csv'
+# bianca_path = 'move/models/ArmsWarmUp/bianca.csv'
 interest_path = 'move/models/ArmsWarmUp/interest_point.txt'
 
-giovi_matrix = csv_to_matrix(giovi_path, interest_path)
-bobo_matrix = csv_to_matrix(bobo_path, interest_path)
-sarra_matrix = csv_to_matrix(sarra_path, interest_path)
-nicco_matrix = csv_to_matrix(nicco_path, interest_path)
-bianca_matrix = csv_to_matrix(bianca_path, interest_path)
-print(giovi_matrix.shape)
-giovi = linear_transformation(giovi_matrix)
-bobo = linear_transformation(bobo_matrix)
-sarra = linear_transformation(sarra_matrix)
-nicco = linear_transformation(nicco_matrix)
-bianca = linear_transformation(bianca_matrix)
+# giovi_matrix = csv_to_matrix(giovi_path, interest_path)
+# bobo_matrix = csv_to_matrix(bobo_path, interest_path)
+# sarra_matrix = csv_to_matrix(sarra_path, interest_path)
+#nicco_matrix = csv_to_matrix(nicco_path, interest_path)
+# bianca_matrix = csv_to_matrix(bianca_path, interest_path)
+# print(giovi_matrix.shape)
+# giovi = linear_transformation(giovi_matrix)
+# bobo = linear_transformation(bobo_matrix)
+# sarra = linear_transformation(sarra_matrix)
+#nicco = linear_transformation(nicco_matrix)
+# bianca = linear_transformation(bianca_matrix)
 
 # giovi,bobo=compare_two_movements(giovi,bobo)
 # sarra,nicco=compare_two_movements(sarra,nicco)
-nicco, bianca = compare_two_movements(nicco, bianca)
+#nicco, nicco = compare_two_movements(nicco, nicco)
 
 # let_me_see_two_movements(nicco, bianca)
 
@@ -40,7 +40,7 @@ for i in range(len(v)-1):
 print('qui')
 print(spl_mat[0].shape)
 matrix_to_csv(spl_mat[0],'ArmsWarmUp')
-dist, cost, acc, path = dtw(spl_mat[0], spl_mat[1])
+dist, cost, acc, path = dtw(spl_mat[0], spl_mat[1],s=5)
 #visualize(cost,path,spl_mat[0], spl_mat[1])
 path = sincro(path)
 #let_me_see(spl_mat[1])

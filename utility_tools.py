@@ -5,12 +5,12 @@ import math
 import numpy as np
 import body_dictionary as body_dic
 #import matplotlib.pyplot as plt
+from csv_tools import *
 import pandas as pd
 body = body_dic.body()
 dict1=['frame','x','y','score']
 
-connection = [(0, 1), (1, 2), (2, 3), (3, 4), (1, 5), (5, 6), (6, 7),
-              (1, 8), (8, 9), (9, 10), (10, 11), (8, 12), (12, 13), (13, 14)]
+
 color = [(255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0),
          (0, 128, 255), (255, 128, 0), (128, 0, 255), (255, 0, 255), (255, 0, 128),
          (255, 0, 64), (0, 128, 255), (0, 230, 0), (128, 0, 255), (251, 49, 229),
@@ -18,79 +18,6 @@ color = [(255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0
          (0, 128, 255), (255, 128, 0), (128, 0, 255), (255, 0, 255), (255, 0, 128)
          ]
 '''
-
-def csv_to_matrix(path, int_path):
-    """
-
-    :param path: path of file csv with landmarks
-    :param int_path: path of file txt with interest point
-    :return:  matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
-    """
-
-    a = []
-    interest = []
-    temp = open(int_path, 'r')
-    for elem in temp:
-        interest.append(elem)
-    with open(path, 'r') as fin:
-        reader = csv.reader(fin)
-        for row in reader:
-            a.append(row)
-    a = np.asarray(a)
-    a = np.reshape(a, (-1, 25, 3))
-    b = np.zeros(shape=(a.shape[0], a.shape[1], 2))
-    j = 0
-    for element in a:
-        for body_part in interest:
-            part = body_part.replace('\n', '')
-            i = int(body.dictionary[part])
-            if element[i][0] != '' and element[i][1] != '':
-                b[j][i][0] = int(element[i][0].replace("'",''))
-                b[j][i][1] = int(element[i][1])
-            else:
-                b[j][i][0] = None
-                b[j][i][1] = None
-        j = j + 1
-    for i in range(b.shape[0]):
-        for j in range(b.shape[1]):
-            if b[i][j][0] == 0 and b[i][j][1] == 0:
-                b[i][j][0] = None
-                b[i][j][1] = None
-    return b
-
-def funzion(m,int_path):
-
-    interest = []
-    temp = open(int_path, 'r')
-    for elem in temp:
-        interest.append(elem)
-    b = np.zeros(shape=(m.shape[0], m.shape[1], 2))
-    j = 0
-    for element in m:
-        for body_part in interest:
-            part = body_part.replace('\n', '')
-            print(part)
-            i = int(body.dictionary[part])
-            if element[i][0] != '' and element[i][1] != '':
-                b[j][i][0] = int(element[i][0])
-                b[j][i][1] = int(element[i][1])
-            else:
-                b[j][i][0] = None
-                b[j][i][1] = None
-        j = j + 1
-    for i in range(b.shape[0]):
-        for j in range(b.shape[1]):
-            if b[i][j][0] == 0 and b[i][j][1] == 0:
-                b[i][j][0] = None
-                b[i][j][1] = None
-    return b
-
-
-
-def array_to_csv(v, name_file):
-    with open('move/models/'+ name_file + '.csv', mode='w') as employee_file:
-        employee_writer = csv.writer(employee_file, delimiter=',', quoting=csv.QUOTE_NONE)
-        employee_writer.writerow(v)
 
 
 
@@ -106,56 +33,19 @@ def matrix_to_csv(matrix, name_file):
                 employee_writer.writerow(int(matrix[i][j]))
 
 
-def matrix_to_csv_3D(matrix, name_file):
-    """
-    :param matrix: matrix to convert in file csv
-    :param name_file: part of name file csv
-    """
-    with open('matrix_to_csv_' + name_file + '.csv', mode='w') as employee_file:
-        employee_writer = csv.writer(employee_file, delimiter=',', quoting=csv.QUOTE_NONE)
-        for i in range(matrix.shape[0]):
-            employee_writer.writerow(matrix[i][:][0])
 
-
-
-
-def transform_matrix_noNan(matrix, cod):
-    """
-
-    :param matrix: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
-    :param cod: 0 or 1
-    :return: matrix with element no nan, replaced with 700 or -700
-    """
-    if cod == 0:
-        value_ = 700
-    else:
-        value_ = -700
-    for i in range(matrix.shape[0]):
-        for j in range(matrix.shape[1]):
-            if math.isnan(matrix[i][j][0]):
-                matrix[i][j][0] = value_
-                matrix[i][j][1] = value_
-    return matrix
-'''
-
-def compare_two_movements(matrix1, matrix2):
-    """
-
-    :param matrix1: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
-    :param matrix2: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
-    :return two matrix with element no nan
-    """
-    matrix1 = transform_matrix_noNan(matrix1, 0)
-    matrix2 = transform_matrix_noNan(matrix2, 0)
-    return matrix1, matrix2
-
-
-def let_me_see(matrix):
+def let_me_see(df):
     """
     Goal: show the movement of the person
 
     :param matrix: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
     """
+    #print max
+    for i in range(max(df['frame'])):
+        bframe = np.zeros((650, 650, 3), np.uint8)
+        overlay = bframe
+        if()
+        cv2.circle(overlay, (x, y), 5, color[j], -1)
 
     for i in range(matrix.shape[0]):
         bframe = np.zeros((650, 650, 3), np.uint8)
@@ -177,7 +67,7 @@ def let_me_see(matrix):
         k = cv2.waitKey(1)
         if k == 27:
             break;
-
+'''
 
 def let_me_see_two_movements(matrix1, matrix2):
     """
@@ -332,14 +222,15 @@ def visualize(cost, path, x, y):
 
 '''
 def get_model(exercise):
-    weight =[]
-    interest_path = 'move/models/'+exercise+'/interest_point.txt'
-    model =csv_to_matrix('move/models/'+exercise+'/model.csv',interest_path)
-    with open('move/models/'+exercise+'/weight.csv', 'r') as fin:
-        reader = csv.reader(fin)
-        for row in reader:
-            weight.append(row)
-    return model, np.asarray(weight)
+    # weight =[]
+    # interest_path = 'move/models/'+exercise+'/interest_point.txt'
+    model =csv_to_matrix('move/models/'+exercise+'/cycle/model.csv')
+    weight=csv_to_matrix('move/models/'+exercise+'/cycle/weight.csv')
+    # with open('move/models/'+exercise+'/weight.csv', 'r') as fin:
+    #     reader = csv.reader(fin)
+    #     for row in reader:
+    #         weight.append(row)
+    return model,weight
 
 def remove_not_interest_point(int_path,data):
     """
