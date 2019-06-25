@@ -2,7 +2,6 @@ import pyopenpose as op
 import cv2
 import numpy as np
 
-
 def video_to_matrix(src):
     params = dict()
     params["model_folder"] = "models/"

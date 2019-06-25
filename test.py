@@ -5,12 +5,12 @@ from time_tools import *
 from dtw import dtw
 from statistic import *
 
-giovi_path = 'move/ArmsWarmUp/giovi_angle0.csv'
-bobo_path = 'move/ArmsWarmUp/bobo.csv'
-sarra_path = 'move/ArmsWarmUp/sarra.csv'
-nicco_path = 'move/ArmsWarmUp/nicco.csv'
-bianca_path = 'move/ArmsWarmUp/bianca.csv'
-interest_path = 'move/ArmsWarmUp/interest_point.txt'
+giovi_path = 'move/models/ArmsWarmUp/giovi_angle0.csv'
+bobo_path = 'move/models/ArmsWarmUp/bobo.csv'
+sarra_path = 'move/models/ArmsWarmUp/sarra.csv'
+nicco_path = 'move/models/ArmsWarmUp/nicco.csv'
+bianca_path = 'move/models/ArmsWarmUp/bianca.csv'
+interest_path = 'move/models/ArmsWarmUp/interest_point.txt'
 
 giovi_matrix = csv_to_matrix(giovi_path, interest_path)
 bobo_matrix = csv_to_matrix(bobo_path, interest_path)

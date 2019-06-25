@@ -5,8 +5,9 @@ import math
 import numpy as np
 import body_dictionary as body_dic
 #import matplotlib.pyplot as plt
-
+import pandas as pd
 body = body_dic.body()
+dict1=['frame','x','y','score']
 
 connection = [(0, 1), (1, 2), (2, 3), (3, 4), (1, 5), (5, 6), (6, 7),
               (1, 8), (8, 9), (9, 10), (10, 11), (8, 12), (12, 13), (13, 14)]
@@ -16,7 +17,7 @@ color = [(255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0
          (255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0),
          (0, 128, 255), (255, 128, 0), (128, 0, 255), (255, 0, 255), (255, 0, 128)
          ]
-
+'''
 
 def csv_to_matrix(path, int_path):
     """
@@ -105,7 +106,6 @@ def matrix_to_csv(matrix, name_file):
                 employee_writer.writerow(int(matrix[i][j]))
 
 
-'''
 def matrix_to_csv_3D(matrix, name_file):
     """
     :param matrix: matrix to convert in file csv
@@ -116,7 +116,7 @@ def matrix_to_csv_3D(matrix, name_file):
         for i in range(matrix.shape[0]):
             employee_writer.writerow(matrix[i][:][0])
 
-'''
+
 
 
 def transform_matrix_noNan(matrix, cod):
@@ -136,7 +136,7 @@ def transform_matrix_noNan(matrix, cod):
                 matrix[i][j][0] = value_
                 matrix[i][j][1] = value_
     return matrix
-
+'''
 
 def compare_two_movements(matrix1, matrix2):
     """
@@ -339,5 +339,52 @@ def get_model(exercise):
         reader = csv.reader(fin)
         for row in reader:
             weight.append(row)
-
     return model, np.asarray(weight)
+
+def remove_not_interest_point(int_path,data):
+    """
+    Goal: delete not interest point in data
+
+    :param int_path: path of file txt with interest point of body
+    :param data: dataframe [frame;x;y;score;body_part]
+    :return: dataframe without not important interest point for the actual exercise
+    """
+    interest = []
+    temp = open(int_path, 'r')
+    for elem in temp:
+        interest.append(elem.replace('\n', ''))
+    for i in range(len(data)):
+        bp=data.loc[i,'body_part']
+        if not bp in interest:
+            data.drop(i,inplace=True)
+    return data
+
+def create_dataframe(matrix, dict=dict1):
+    """
+    Goal: create dataframe without index
+
+    :param matrix: matrix [N*M]
+    :param dict: name of columns [M] -default:['frame','x','y','score']
+    :return: dataframe without index
+    """
+    df = pd.DataFrame(data=np.array(matrix), columns=dict)
+    blankIndex = [''] * len(df)
+    df.index = blankIndex
+    return df
+
+def add_body_parts(df,body_part):
+    """
+    Goal: add new column to dataframe containing body's parts
+
+    :param df: dataframe[frame;x;y;score]
+    :param body_part: dictionary containing body's parts
+    :return:dataframe with new column of body's parts
+    """
+    bp =[]
+    l = math.ceil(len(df) / 15)  # ritorna l'intero superiore
+    for i in range(l):
+        for i in range(15):
+            bp.append(body_part[i])
+    s = pd.Series(bp)
+    df['body_part']=(s)
+    return df

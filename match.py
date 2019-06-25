@@ -1,7 +1,8 @@
 import argparse
-#from video import video_to_matrix
+from video import video_to_matrix
 from linear_transformation import *
 from utility_tools import *
+from csv_tools import *
 import body_dictionary as body_dic
 
 body = body_dic.body()
@@ -19,7 +20,7 @@ ap.add_argument("-e","--exercise",required=True, help='Chose exercise')
 args = vars(ap.parse_args())
 print("{}".format(args["exercise"]))
 ex=args["exercise"]
-interest_path = 'move/'+ex+'/interest_point.txt'
+interest_path = 'move/model/'+ex+'/interest_point.txt'
 
 #mostra a video il tipo di esercizio da fare
 
@@ -29,9 +30,13 @@ app.add_argument("-v","--video",required=True,help="Video") #user video
 args= vars(app.parse_args())
 print("{}".format(args["video"]))
 
-model , model_w = get_model(ex)
+
 #print(model.shape, model_w.shape)
-matrix_ =video_to_matrix(args["video"])
-matrix = matrix_[:, : , 1:]
-matrix = funzion(matrix,interest_path)
-user_input = linear_transformation(matrix)
+matrix =video_to_matrix(args["video"])
+#matrix_to_csv(matrix,'user')
+data=create_dataframe(matrix,['frame','x','y','score'])
+data=add_body_parts(data,body.dictionary)
+data = remove_not_interest_point(data,interest_path)
+
+user_input = linear_transformation(data)
+model , model_w = get_model(ex)
