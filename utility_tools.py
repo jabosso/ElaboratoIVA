@@ -4,7 +4,7 @@ import time
 import math
 import numpy as np
 import body_dictionary as body_dic
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 body = body_dic.body()
 
@@ -312,7 +312,7 @@ def let_me_see_sicro(matrix1, matrix2, path):
         if k == 27:
             break;
 
-
+'''
 def visualize(cost, path, x, y):
     """
     :param cost: cost returned by dtw()
@@ -330,12 +330,12 @@ def visualize(cost, path, x, y):
     #plt.axis('tight')
     plt.show()
 
-
-def get_model(in_str):
+'''
+def get_model(exercise):
     weight =[]
-    interest_path = 'move/models/'+in_str+'/interest_point.txt'
-    model =csv_to_matrix('move/models/'+in_str+'/model.csv',interest_path)
-    with open('move/models/'+in_str+'/weight.csv', 'r') as fin:
+    interest_path = 'move/models/'+exercise+'/interest_point.txt'
+    model =csv_to_matrix('move/models/'+exercise+'/model.csv',interest_path)
+    with open('move/models/'+exercise+'/weight.csv', 'r') as fin:
         reader = csv.reader(fin)
         for row in reader:
             weight.append(row)

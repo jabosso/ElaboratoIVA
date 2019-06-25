@@ -20,7 +20,7 @@ def video_to_matrix(src):
         if ret:
             datum.cvInputData = frame
             opWrapper.emplaceAndPop([datum])
-            for i in range(25):
+            for i in range(15):   #non più 25
                 x = int(datum.poseKeypoints[0][i][0])
                 y = int(datum.poseKeypoints[0][i][1])
                 if x == 0 and y == 0:

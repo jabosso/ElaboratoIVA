@@ -4,12 +4,13 @@ from scipy.spatial.distance import cdist
 from time_tools import *
 from dtw import dtw
 from statistic import *
-giovi_path = 'move/arms_warmup/giovi_angle0.csv'
-bobo_path = 'move/arms_warmup/bobo.csv'
-sarra_path = 'move/arms_warmup/sarra.csv'
-nicco_path = 'move/arms_warmup/nicco.csv'
-bianca_path = 'move/arms_warmup/bianca.csv'
-interest_path = 'move/arms_warmup/interest_point.txt'
+
+giovi_path = 'move/ArmsWarmUp/giovi_angle0.csv'
+bobo_path = 'move/ArmsWarmUp/bobo.csv'
+sarra_path = 'move/ArmsWarmUp/sarra.csv'
+nicco_path = 'move/ArmsWarmUp/nicco.csv'
+bianca_path = 'move/ArmsWarmUp/bianca.csv'
+interest_path = 'move/ArmsWarmUp/interest_point.txt'
 
 giovi_matrix = csv_to_matrix(giovi_path, interest_path)
 bobo_matrix = csv_to_matrix(bobo_path, interest_path)
@@ -38,7 +39,7 @@ for i in range(len(v)-1):
     spl_mat.append(matr)
 print('qui')
 print(spl_mat[0].shape)
-matrix_to_csv(spl_mat[0],'arms_warmup')
+matrix_to_csv(spl_mat[0],'ArmsWarmUp')
 dist, cost, acc, path = dtw(spl_mat[0], spl_mat[1])
 #visualize(cost,path,spl_mat[0], spl_mat[1])
 path = sincro(path)
