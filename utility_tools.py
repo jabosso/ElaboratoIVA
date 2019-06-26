@@ -4,19 +4,17 @@ import time
 import math
 import numpy as np
 import body_dictionary as body_dic
-#import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from csv_tools import *
 import pandas as pd
+
 body = body_dic.body()
-dict1=['frame','x','y','score']
+dict1 = ['frame', 'x', 'y', 'score']
 
-
-color = [(255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0),
-         (0, 128, 255), (255, 128, 0), (128, 0, 255), (255, 0, 255), (255, 0, 128),
-         (255, 0, 64), (0, 128, 255), (0, 230, 0), (128, 0, 255), (251, 49, 229),
-         (255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0),
-         (0, 128, 255), (255, 128, 0), (128, 0, 255), (255, 0, 255), (255, 0, 128)
-         ]
+color = [(255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0), (0, 128, 255), (255, 128, 0),
+         (128, 0, 255), (255, 0, 255), (255, 0, 128), (255, 0, 64), (0, 128, 255), (0, 230, 0), (128, 0, 255),
+         (251, 49, 229), (255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0), (0, 128, 255),
+         (255, 128, 0), (128, 0, 255), (255, 0, 255), (255, 0, 128)]
 '''
 def matrix_to_csv(matrix, name_file):
     """
@@ -33,6 +31,7 @@ def matrix_to_csv(matrix, name_file):
 
 '''
 
+
 def create_dataframe(matrix, dict=dict1):
     """
     Goal: create dataframe without index
@@ -46,7 +45,8 @@ def create_dataframe(matrix, dict=dict1):
     df.index = blankIndex
     return df
 
-def add_body_parts(df,body_part):
+
+def add_body_parts(df, body_part):
     """
     Goal: add new column to dataframe containing body's parts
 
@@ -54,16 +54,17 @@ def add_body_parts(df,body_part):
     :param body_part: dictionary containing body's parts
     :return:dataframe with new column of body's parts
     """
-    bp =[]
+    bp = []
     l = math.ceil(len(df) / 15)  # ritorna l'intero superiore
     for i in range(l):
         for i in range(15):
             bp.append(body_part[i])
     s = pd.Series(bp)
-    df['body_part']=(s)
+    df['body_part'] = (s)
     return df
 
-def remove_not_interest_point(int_path,data):
+
+def remove_not_interest_point(int_path, data):
     """
     Goal: delete not interest point in data
 
@@ -76,10 +77,11 @@ def remove_not_interest_point(int_path,data):
     for elem in temp:
         interest.append(elem.replace('\n', ''))
     for i in range(len(data)):
-        bp=data.loc[i,'body_part']
+        bp = data.loc[i, 'body_part']
         if not bp in interest:
-            data.drop(i,inplace=True)
+            data.drop(i, inplace=True)
     return data
+
 
 def let_me_see(df):
     """
@@ -87,17 +89,18 @@ def let_me_see(df):
 
     :param df: dataframe [frame;x;y;score;body_part]
     """
-    for i in range(max(df['frame'])+1):
+    for i in range(max(df['frame']) + 1):
         bframe = np.zeros((650, 650, 3), np.uint8)
-        block_frame=df.loc[df['frame'] == i]
-        bframe = body_plot(bframe,block_frame)
+        block_frame = df.loc[df['frame'] == i]
+        bframe = body_plot(bframe, block_frame)
         cv2.imshow('output', bframe)
         time.sleep(0.2)
         k = cv2.waitKey(1)
         if k == 27:
             break;
 
-def body_plot(blank_frame,block_frame):
+
+def body_plot(blank_frame, block_frame):
     """
     Goal: plot the body of one frame
 
@@ -122,6 +125,7 @@ def body_plot(blank_frame,block_frame):
             _ = ''
     return blank_frame
 
+
 def let_me_see_two_movements(df1, df2):
     """
     Goal: show the movement of two person simultaneously
@@ -130,12 +134,12 @@ def let_me_see_two_movements(df1, df2):
     :param df2:dataframe of person 2[frame;x;y;score;body_part]
 
     """
-    for i in range(max(df1['frame'])+1):
+    for i in range(max(df1['frame']) + 1):
         bframe1 = np.zeros((650, 650, 3), np.uint8)
         bframe2 = bframe1
-        d1=df1.loc[df1['frame'] == i]
+        d1 = df1.loc[df1['frame'] == i]
         d2 = df2.loc[df2['frame'] == i]
-        bframe1 = body_plot(bframe1,d1)
+        bframe1 = body_plot(bframe1, d1)
         bframe2 = body_plot(bframe2, d2)
         alpha = 0.3
         cv2.addWeighted(bframe2, alpha, bframe1, 1 - alpha, 0, bframe1)
@@ -144,6 +148,7 @@ def let_me_see_two_movements(df1, df2):
         k = cv2.waitKey(1)
         if k == 27:
             break;
+
 
 '''
 def sincro(path):
@@ -258,16 +263,15 @@ def visualize(cost, path, x, y):
     plt.show()
 
 '''
+
+
 def get_model(exercise):
     # weight =[]
     # interest_path = 'move/models/'+exercise+'/interest_point.txt'
-    model =csv_to_matrix('move/models/'+exercise+'/cycle/model.csv')
-    weight=csv_to_matrix('move/models/'+exercise+'/cycle/weight.csv')
+    model = csv_to_matrix('move/models/' + exercise + '/cycle/model.csv')
+    weight = csv_to_matrix('move/models/' + exercise + '/cycle/weight.csv')
     # with open('move/models/'+exercise+'/weight.csv', 'r') as fin:
     #     reader = csv.reader(fin)
     #     for row in reader:
     #         weight.append(row)
-    return model,weight
-
-
-
+    return model, weight

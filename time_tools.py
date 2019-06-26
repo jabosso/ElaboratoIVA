@@ -2,30 +2,32 @@ import math
 import numpy as np
 from scipy.spatial.distance import cdist
 import body_dictionary as body_dic
+
 body = body_dic.body()
 
-def choosen_point_(df):
+
+def choosen_point(df):
     """
     Goal: determinate the point to max variance
 
-    :param M: dataframe
-    :return: point to max variance
+    :param df: dataframe [frame;x;y;score;body_part]
+    :return: label of point to max variance
     """
-    max_list=[]
+    max_list = []
     max_list_p = []
     for i in body.dictionary:
         try:
             current_part = body.dictionary[i]
-            d = df.loc[df['body_part']== current_part]
+            d = df.loc[df['body_part'] == current_part]
             t_list = []
             for j in range(d.shape[0]):
-                t_list.append([d.iloc[j].x,d.iloc[j].y])
-            m = cdist(t_list,t_list)
+                t_list.append([d.iloc[j].x, d.iloc[j].y])
+            m = cdist(t_list, t_list)
             max_list.append(np.max(m[0]))
             max_list_p.append(current_part)
         except:
             _ = ''
-    index_max =np.argmax(max_list)
+    index_max = np.argmax(max_list)
     return max_list_p[index_max]
 
 
@@ -37,14 +39,14 @@ def cycle_identify(dataframe):
     :return: midpoints to generate cycles
     """
     bp = choosen_point(dataframe)
-    data=dataframe.loc[dataframe['body_part']==bp ]
+    data = dataframe.loc[dataframe['body_part'] == bp]
     print(data)
-    data_tuple=[]
+    data_tuple = []
     for i in range(data.shape[0]):
-        data_tuple.append([data.iloc[i].x,data.iloc[i].y])
-    dist=cdist(data_tuple,data_tuple)
-    max=np.max(dist[0])
-    min=np.min(dist[0])
+        data_tuple.append([data.iloc[i].x, data.iloc[i].y])
+    dist = cdist(data_tuple, data_tuple)
+    max = np.max(dist[0])
+    min = np.min(dist[0])
     threshold = (max + min) / 3
     temp = []
     temp.append(0)
@@ -53,7 +55,7 @@ def cycle_identify(dataframe):
             temp.append(i)
     temp.append(dist.shape[1])
     midpoints = []
-    for i in range(0, len(temp)-1, 2):
+    for i in range(0, len(temp) - 1, 2):
         midpoints.append((temp[i + 1] + temp[i]) / 2)
     return midpoints
 
@@ -70,8 +72,7 @@ def generate_cycle_model(dataframe, midpoints):
     for i in range(len(midpoints) - 1):
         start = int(midpoints[i])
         end = int(midpoints[i + 1])
-        frames=np.arange(start,end+1)
-        df=dataframe.loc[dataframe['frame'].isin(frames)]
+        frames = np.arange(start, end + 1)
+        df = dataframe.loc[dataframe['frame'].isin(frames)]
         spl_mat.append(df)
     return spl_mat
-

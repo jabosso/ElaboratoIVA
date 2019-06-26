@@ -14,6 +14,7 @@ def dtw(x, y, warp=1, w=inf, s=1.0):
     Returns the minimum distance, the cost matrix, the accumulated cost matrix, and the wrap path.
     """
     p = choosen_point(x)
+    #creare matrici di x e y --sono dataframe
     x = x[:, p]
     y = y[:, p]
     assert len(x)
