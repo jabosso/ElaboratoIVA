@@ -27,6 +27,7 @@ def choosen_point(df):
             max_list_p.append(current_part)
         except:
             _ = ''
+
     index_max = np.argmax(max_list)
     return max_list_p[index_max]
 
@@ -40,7 +41,6 @@ def cycle_identify(dataframe):
     """
     bp = choosen_point(dataframe)
     data = dataframe.loc[dataframe['body_part'] == bp]
-    print(data)
     data_tuple = []
     for i in range(data.shape[0]):
         data_tuple.append([data.iloc[i].x, data.iloc[i].y])
@@ -54,9 +54,10 @@ def cycle_identify(dataframe):
         if ((dist[0][i] - threshold) * (dist[0][i + 1] - threshold)) < 0:
             temp.append(i)
     temp.append(dist.shape[1])
+
     midpoints = []
-    for i in range(0, len(temp) - 1, 2):
-        midpoints.append((temp[i + 1] + temp[i]) / 2)
+    for i in range(0, len(temp), 2):
+        midpoints.append((temp[i ] + temp[i+1]) / 2)
     return midpoints
 
 

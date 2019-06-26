@@ -16,8 +16,6 @@ app.add_argument("-e", "--exercise", required=True, help="insert type of video e
 args = vars(app.parse_args())
 print(args['video'])
 matrix = video_to_matrix(args["video"])
-#app.add_argument("-e", "--exercise", required=True, help="insert type of video exercise")
-#args = vars(app.parse_args())
 ex = args["exercise"]
 path = 'move/models/' + ex
 try:
@@ -27,14 +25,14 @@ except OSError:
     print('creation of directory failed')
 
 
-interest_point_path = path + 'interest_point.txt'
+interest_point_path = path + '/interest_point.txt'
 matrix = linear_transformation(matrix)
 data = create_dataframe(matrix)
 matrix_to_csv(data, path+'/complete/', ex)
 data = add_body_parts(data, body.dictionary)
-data = remove_not_interest_point(data, interest_point_path)
-
+data = remove_not_interest_point(interest_point_path, data)
 mid_points = cycle_identify(data)
 data = generate_cycle_model(data, mid_points)
 data_model = data[0]
-matrix_to_csv(data_model, 'move/models/' + ex + '/cycle/', 'model')
+
+matrix_to_csv(data_model, 'move/models/' + ex + '/cycle/', 'model',['frame','x','y','score','body_part'])

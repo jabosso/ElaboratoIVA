@@ -40,9 +40,11 @@ def create_dataframe(matrix, dict=dict1):
     :param dict: name of columns [M] -default:['frame','x','y','score']
     :return: dataframe without index
     """
-    df = pd.DataFrame(data=np.array(matrix), columns=dict)
-    blankIndex = [''] * len(df)
-    df.index = blankIndex
+    #print(matrix)
+
+    df = pd.DataFrame(data=matrix.reshape(-1,4), columns=dict)
+    #blankIndex = [''] * len(df)
+    #df.index = blankIndex
     return df
 
 
@@ -57,10 +59,9 @@ def add_body_parts(df, body_part):
     bp = []
     l = math.ceil(len(df) / 15)  # ritorna l'intero superiore
     for i in range(l):
-        for i in range(15):
-            bp.append(body_part[i])
-    s = pd.Series(bp)
-    df['body_part'] = (s)
+        for j in range(15):
+            bp.append(body_part[j])
+    df.insert(4,'body_part',bp)
     return df
 
 
@@ -77,7 +78,7 @@ def remove_not_interest_point(int_path, data):
     for elem in temp:
         interest.append(elem.replace('\n', ''))
     for i in range(len(data)):
-        bp = data.loc[i, 'body_part']
+        bp = data.loc[i].body_part
         if not bp in interest:
             data.drop(i, inplace=True)
     return data

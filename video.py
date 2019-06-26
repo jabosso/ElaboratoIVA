@@ -22,10 +22,11 @@ def video_to_matrix(src):
             for i in range(15):   #non più 25
                 x = int(datum.poseKeypoints[0][i][0])
                 y = int(datum.poseKeypoints[0][i][1])
+                score = float(datum.poseKeypoints[0][i][2])
                 if x == 0 and y == 0:
-                    istanza = [j, None, None]
+                    istanza = [j, None, None, None]
                 else:
-                    istanza = [j, x, y]
+                    istanza = [j, x, y, score]
                 dataout.append(istanza)
         else :
             k = 27
