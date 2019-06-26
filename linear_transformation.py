@@ -89,8 +89,8 @@ def rotate_around_point_highperf(point, angle, origin):
     :param origin: center of rotation
     :return: tuple of coordinate's point rotated
     """
-    x, y = point
-    offset_x, offset_y = origin
+    _, x, y = point
+    _, offset_x, offset_y = origin
     adjusted_x = (x - offset_x)
     adjusted_y = (y - offset_y)
     cos_rad = math.cos(angle)
@@ -98,7 +98,7 @@ def rotate_around_point_highperf(point, angle, origin):
     qx = offset_x + cos_rad * adjusted_x + sin_rad * adjusted_y
     qy = offset_y + -sin_rad * adjusted_x + cos_rad * adjusted_y
 
-    return qx, qy
+    return _, qx, qy
 
 
 def linear_transformation(matrix, rotation_ref=(1,5)):
