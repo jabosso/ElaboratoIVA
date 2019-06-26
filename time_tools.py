@@ -1,30 +1,32 @@
 import math
 import numpy as np
 from scipy.spatial.distance import cdist
+import body_dictionary as body_dic
+body = body_dic.body()
 
-
-def choosen_point(M):
+def choosen_point_(df):
     """
     Goal: determinate the point to max variance
 
     :param M: dataframe
     :return: point to max variance
     """
-    dist = np.zeros((M.shape[1]))
-    for i in range(M.shape[1]):
-        dist_b = np.zeros((M.shape[0]))
-        for j in range(M.shape[0]):
-            if not math.isnan(M[j][i][0]) and not math.isnan(M[j][i][1]):
-                temp = np.zeros((M.shape[0]))
-                for k in range(M.shape[0]):
-                    if not math.isnan(M[k][i][0]) and not math.isnan(M[k][i][1]):
-                        temp[k] = math.sqrt((M[j][i][0] - M[k][i][0]) ** 2 + (M[j][i][1] - M[k][i][1]) ** 2)
-                    else:
-                        temp[k] = 0
-                dist_b[j] = np.max(temp)
-        dist[i] = np.max(dist_b)
-    point = np.argmax(dist)
-    return point
+    max_list=[]
+    max_list_p = []
+    for i in body.dictionary:
+        try:
+            current_part = body.dictionary[i]
+            d = df.loc[df['body_part']== current_part]
+            t_list = []
+            for j in range(d.shape[0]):
+                t_list.append([d.iloc[j].x,d.iloc[j].y])
+            m = cdist(t_list,t_list)
+            max_list.append(np.max(m[0]))
+            max_list_p.append(current_part)
+        except:
+            _ = ''
+    index_max =np.argmax(max_list)
+    return max_list_p[index_max]
 
 
 def cycle_identify(dataframe):
