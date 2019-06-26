@@ -18,9 +18,6 @@ color = [(255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0
          (0, 128, 255), (255, 128, 0), (128, 0, 255), (255, 0, 255), (255, 0, 128)
          ]
 '''
-
-
-
 def matrix_to_csv(matrix, name_file):
     """
     :param matrix: matrix to convert in file csv
@@ -34,81 +31,121 @@ def matrix_to_csv(matrix, name_file):
 
 
 
+'''
+
+def create_dataframe(matrix, dict=dict1):
+    """
+    Goal: create dataframe without index
+
+    :param matrix: matrix [N*M]
+    :param dict: name of columns [M] -default:['frame','x','y','score']
+    :return: dataframe without index
+    """
+    df = pd.DataFrame(data=np.array(matrix), columns=dict)
+    blankIndex = [''] * len(df)
+    df.index = blankIndex
+    return df
+
+def add_body_parts(df,body_part):
+    """
+    Goal: add new column to dataframe containing body's parts
+
+    :param df: dataframe[frame;x;y;score]
+    :param body_part: dictionary containing body's parts
+    :return:dataframe with new column of body's parts
+    """
+    bp =[]
+    l = math.ceil(len(df) / 15)  # ritorna l'intero superiore
+    for i in range(l):
+        for i in range(15):
+            bp.append(body_part[i])
+    s = pd.Series(bp)
+    df['body_part']=(s)
+    return df
+
+def remove_not_interest_point(int_path,data):
+    """
+    Goal: delete not interest point in data
+
+    :param int_path: path of file txt with interest point of body
+    :param data: dataframe [frame;x;y;score;body_part]
+    :return: dataframe without not important interest point for the actual exercise
+    """
+    interest = []
+    temp = open(int_path, 'r')
+    for elem in temp:
+        interest.append(elem.replace('\n', ''))
+    for i in range(len(data)):
+        bp=data.loc[i,'body_part']
+        if not bp in interest:
+            data.drop(i,inplace=True)
+    return data
+
 def let_me_see(df):
     """
     Goal: show the movement of the person
 
-    :param matrix: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
+    :param df: dataframe [frame;x;y;score;body_part]
     """
-    #print max
-    for i in range(max(df['frame'])):
+    for i in range(max(df['frame'])+1):
         bframe = np.zeros((650, 650, 3), np.uint8)
-        overlay = bframe
-        if()
-        cv2.circle(overlay, (x, y), 5, color[j], -1)
-
-    for i in range(matrix.shape[0]):
-        bframe = np.zeros((650, 650, 3), np.uint8)
-        overlay = bframe
-        for j in range(matrix.shape[1]):
-            if (not math.isnan(matrix[i][j][0])) and (not math.isnan(matrix[i][j][0])):
-                x = int(matrix[i][j][0])
-                y = int(matrix[i][j][1])
-                cv2.circle(overlay, (x, y), 5, color[j], -1)
-        for element in connection:
-            if (not math.isnan(matrix[i][element[0]][0])) and (not math.isnan(matrix[i][element[1]][0])):
-                point_a = (int(matrix[i][element[0]][0]), int(matrix[i][element[0]][1]))
-                point_b = (int(matrix[i][element[1]][0]), int(matrix[i][element[1]][1]))
-                cv2.line(bframe, point_a, point_b, color[element[0]], 4)
-        alpha = 0.3
-        cv2.addWeighted(overlay, alpha, bframe, 1 - alpha, 0, bframe)
+        block_frame=df.loc[df['frame'] == i]
+        bframe = body_plot(bframe,block_frame)
         cv2.imshow('output', bframe)
-        time.sleep(0.17)
+        time.sleep(0.2)
         k = cv2.waitKey(1)
         if k == 27:
             break;
+
+def body_plot(blank_frame,block_frame):
+    """
+    Goal: plot the body of one frame
+
+    :param blank_frame: blank frame to draw
+    :param block_frame: dataframe of point of same frame [frame;x;y;score;body_part]
+    :return: frame with drawn point and connection
+    """
+    x = block_frame['x']
+    y = block_frame['y']
+    for j in range(x.shape[0]):
+        cv2.circle(blank_frame, (x.iloc[j], y.iloc[j]), 5, [255, 0, 0], -1)
+    for el in body.connection:
+        d_A = block_frame.loc[block_frame['body_part'] == body.dictionary[el[0]]]
+        d_B = block_frame.loc[block_frame['body_part'] == body.dictionary[el[1]]]
+        try:
+            _ = d_A['body_part'].item()
+            _ = d_B['body_part'].item()
+            point_a = (d_A.x.item(), d_A.y.item())
+            point_b = (d_B.x.item(), d_B.y.item())
+            cv2.line(blank_frame, point_a, point_b, color[el[0]], 4)
+        except:
+            _ = ''
+    return blank_frame
+
+def let_me_see_two_movements(df1, df2):
+    """
+    Goal: show the movement of two person simultaneously
+
+    :param df1:dataframe of person 1 [frame;x;y;score;body_part]
+    :param df2:dataframe of person 2[frame;x;y;score;body_part]
+
+    """
+    for i in range(max(df1['frame'])+1):
+        bframe1 = np.zeros((650, 650, 3), np.uint8)
+        bframe2 = bframe1
+        d1=df1.loc[df1['frame'] == i]
+        d2 = df2.loc[df2['frame'] == i]
+        bframe1 = body_plot(bframe1,d1)
+        bframe2 = body_plot(bframe2, d2)
+        alpha = 0.3
+        cv2.addWeighted(bframe2, alpha, bframe1, 1 - alpha, 0, bframe1)
+        cv2.imshow('output', bframe1)
+        time.sleep(0.2)
+        k = cv2.waitKey(1)
+        if k == 27:
+            break;
+
 '''
-
-def let_me_see_two_movements(matrix1, matrix2):
-    """
-    Goal:show the movement of two person simultaneously
-
-    :param matrix: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
-    """
-
-    for i in range(matrix1.shape[0]):
-        bframe = np.zeros((650, 650, 3), np.uint8)
-        overlay = bframe
-        for j in range(matrix1.shape[1]):
-            if (not math.isnan(matrix1[i][j][0])) and (not math.isnan(matrix1[i][j][0])):
-                x = int(matrix1[i][j][0])
-                y = int(matrix1[i][j][1])
-                cv2.circle(overlay, (x, y), 5, color[j], -1)
-        for element in connection:
-            if (not math.isnan(matrix1[i][element[0]][0])) and (not math.isnan(matrix1[i][element[1]][0])):
-                point_a = (int(matrix1[i][element[0]][0]), int(matrix1[i][element[0]][1]))
-                point_b = (int(matrix1[i][element[1]][0]), int(matrix1[i][element[1]][1]))
-                cv2.line(overlay, point_a, point_b, color[1], 4)
-
-        for j in range(matrix2.shape[1]):
-            if (not math.isnan(matrix2[i][j][0])) and (not math.isnan(matrix2[i][j][0])):
-                x = int(matrix2[i][j][0])
-                y = int(matrix2[i][j][1])
-                cv2.circle(bframe, (x, y), 5, color[j], -1)
-        for element in connection:
-            if (not math.isnan(matrix2[i][element[0]][0])) and (not math.isnan(matrix2[i][element[1]][0])):
-                point_a = (int(matrix2[i][element[0]][0]), int(matrix2[i][element[0]][1]))
-                point_b = (int(matrix2[i][element[1]][0]), int(matrix2[i][element[1]][1]))
-                cv2.line(bframe, point_a, point_b, color[5], 4)
-        alpha = 0.3
-        cv2.addWeighted(overlay, alpha, bframe, 1 - alpha, 0, bframe)
-        cv2.imshow('output', bframe)
-        time.sleep(0.17)
-        k = cv2.waitKey(1)
-        if k == 27:
-            break;
-
-
 def sincro(path):
     """
 
@@ -202,7 +239,7 @@ def let_me_see_sicro(matrix1, matrix2, path):
         if k == 27:
             break;
 
-'''
+
 def visualize(cost, path, x, y):
     """
     :param cost: cost returned by dtw()
@@ -232,50 +269,5 @@ def get_model(exercise):
     #         weight.append(row)
     return model,weight
 
-def remove_not_interest_point(int_path,data):
-    """
-    Goal: delete not interest point in data
 
-    :param int_path: path of file txt with interest point of body
-    :param data: dataframe [frame;x;y;score;body_part]
-    :return: dataframe without not important interest point for the actual exercise
-    """
-    interest = []
-    temp = open(int_path, 'r')
-    for elem in temp:
-        interest.append(elem.replace('\n', ''))
-    for i in range(len(data)):
-        bp=data.loc[i,'body_part']
-        if not bp in interest:
-            data.drop(i,inplace=True)
-    return data
 
-def create_dataframe(matrix, dict=dict1):
-    """
-    Goal: create dataframe without index
-
-    :param matrix: matrix [N*M]
-    :param dict: name of columns [M] -default:['frame','x','y','score']
-    :return: dataframe without index
-    """
-    df = pd.DataFrame(data=np.array(matrix), columns=dict)
-    blankIndex = [''] * len(df)
-    df.index = blankIndex
-    return df
-
-def add_body_parts(df,body_part):
-    """
-    Goal: add new column to dataframe containing body's parts
-
-    :param df: dataframe[frame;x;y;score]
-    :param body_part: dictionary containing body's parts
-    :return:dataframe with new column of body's parts
-    """
-    bp =[]
-    l = math.ceil(len(df) / 15)  # ritorna l'intero superiore
-    for i in range(l):
-        for i in range(15):
-            bp.append(body_part[i])
-    s = pd.Series(bp)
-    df['body_part']=(s)
-    return df

@@ -4,6 +4,7 @@ from linear_transformation import *
 from utility_tools import *
 from csv_tools import *
 import body_dictionary as body_dic
+from utility_tools import *
 
 body = body_dic.body()
 #interest_path = 'move/ArmsWarmUp/interest_point.txt'
@@ -22,7 +23,9 @@ print("{}".format(args["exercise"]))
 ex=args["exercise"]
 interest_path = 'move/model/'+ex+'/interest_point.txt'
 
+model , model_w = get_model(ex)
 #mostra a video il tipo di esercizio da fare
+let_me_see(model)
 
 app=argparse.ArgumentParser()
 print("Insert you video")
@@ -39,4 +42,3 @@ data=create_dataframe(user_matrix,['frame','x','y','score'])
 data=add_body_parts(data,body.dictionary)
 data = remove_not_interest_point(data,interest_path)
 
-model , model_w = get_model(ex)
