@@ -4,6 +4,7 @@ import numpy as np
 import body_dictionary as body_dic
 import time
 import cv2 as cv2
+from time_tools import *
 body = body_dic.body()
 color = [(255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0),
          (0, 128, 255), (255, 128, 0), (128, 0, 255), (255, 0, 255), (255, 0, 128),
@@ -15,6 +16,9 @@ data = csv_to_matrix('ciao.csv')
 data=add_body_parts(data,body.dictionary)
 data=remove_not_interest_point('move/models/ArmsWarmUp/interest_point.txt',data)
 
+#cycle_identify(data)
+a=generate_cycle_model(data,[0,1,2])
+print(a[1])
 def let_me_see(df):
     """
     Goal: show the movement of the person
@@ -66,7 +70,7 @@ def let_me_see_two_movements(df1, df2):
             break;
 
 
-let_me_see(data)
+#let_me_see(data)
 
 
 #sincro

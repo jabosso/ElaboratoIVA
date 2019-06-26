@@ -27,42 +27,49 @@ def choosen_point(M):
     return point
 
 
-def cycle_identify(matrix):
+def cycle_identify(dataframe):
     """
-    Goal:
+    Goal: find mid_point to determinate cycles
 
-    :param matrix:
-    :return:
+    :param dataframe: [frame;x;y;score;body_part]
+    :return: midpoints to generate cycles
     """
-    p = choosen_point(matrix)
-    M = matrix[:, p]
-    c_M = cdist(M, M)
-    max_ = np.max(c_M[0])
-    min_ = np.min(c_M[0])
-    threshold = (max_ + min_) / 3
+    bp = choosen_point(dataframe)
+    data=dataframe.loc[dataframe['body_part']==bp ]
+    print(data)
+    data_tuple=[]
+    for i in range(data.shape[0]):
+        data_tuple.append([data.iloc[i].x,data.iloc[i].y])
+    dist=cdist(data_tuple,data_tuple)
+    max=np.max(dist[0])
+    min=np.min(dist[0])
+    threshold = (max + min) / 3
     temp = []
     temp.append(0)
-    for i in range(c_M.shape[1] - 1):
-        if ((c_M[0][i] - threshold) * (c_M[0][i + 1] - threshold)) < 0:
+    for i in range(dist.shape[1] - 1):
+        if ((dist[0][i] - threshold) * (dist[0][i + 1] - threshold)) < 0:
             temp.append(i)
-    temp.append(c_M.shape[1])
+    temp.append(dist.shape[1])
     midpoints = []
-    for i in range(0, len(temp), 2):
+    for i in range(0, len(temp)-1, 2):
         midpoints.append((temp[i + 1] + temp[i]) / 2)
     return midpoints
 
-def generate_cycle_model(matrix, mid_points):
+
+def generate_cycle_model(dataframe, midpoints):
     """
     Goal:generate one dataframe for any cycle
 
-    :param matrix:
-    :param mid_points:
-    :return
+    :param dataframe: [frame;x;y;score;body_part]
+    :param midpoints: points to split cycles
+    :return array of cycles containing dataframes
     """
     spl_mat = []
-    for i in range(len(mid_points) - 1):
-        start = int(mid_points[i])
-        end = int(mid_points[i + 1])
-        matr = matrix[start:end]
-        spl_mat.append(matr)
+    for i in range(len(midpoints) - 1):
+        start = int(midpoints[i])
+        end = int(midpoints[i + 1])
+        frames=np.arange(start,end+1)
+        df=dataframe.loc[dataframe['frame'].isin(frames)]
+        spl_mat.append(df)
     return spl_mat
+
