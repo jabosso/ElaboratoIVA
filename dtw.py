@@ -2,8 +2,12 @@ from numpy import array, zeros, full, argmin, inf
 from math import isinf
 import math
 from time_tools import *
+import body_dictionary as body_dic
 
-def dtw(x, y, warp=1, w=inf, s=1.0):
+
+body = body_dic.body()
+
+def dtw(x, y, warp=1, w=inf, s=5.0):
     """
     Computes Dynamic Time Warping (DTW) of two sequences.
     :param array x: N1*M array
@@ -14,9 +18,19 @@ def dtw(x, y, warp=1, w=inf, s=1.0):
     Returns the minimum distance, the cost matrix, the accumulated cost matrix, and the wrap path.
     """
     p = choosen_point(x)
-    #creare matrici di x e y --sono dataframe
-    x = x[:, p]
-    y = y[:, p]
+    keys = list(body.dictionary.keys())
+    val = list(body.dictionary.values())
+    index=keys[val.index(p)]
+
+
+    x=x.loc[x['body_part']== p]
+    y = y.loc[y['body_part'] == p]
+    x=x[['x','y']]
+    y=y[['x','y']]
+    x=x.values
+    y=y.values
+
+
     assert len(x)
     assert len(y)
     assert isinf(w) or (w >= abs(len(x) - len(y)))

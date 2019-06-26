@@ -95,7 +95,7 @@ def let_me_see(df):
         block_frame = df.loc[df['frame'] == i]
         bframe = body_plot(bframe, block_frame)
         cv2.imshow('output', bframe)
-        time.sleep(0.2)
+        #time.sleep(0.1)
         k = cv2.waitKey(1)
         if k == 27:
             break;
@@ -121,7 +121,7 @@ def body_plot(blank_frame, block_frame):
             _ = d_B['body_part'].item()
             point_a = (d_A.x.item(), d_A.y.item())
             point_b = (d_B.x.item(), d_B.y.item())
-            cv2.line(blank_frame, point_a, point_b, color[el[0]], 4)
+            cv2.line(blank_frame, point_a, point_b, [0,255,255], 4)
         except:
             _ = ''
     return blank_frame
@@ -135,7 +135,7 @@ def let_me_see_two_movements(df1, df2):
     :param df2:dataframe of person 2[frame;x;y;score;body_part]
 
     """
-    for i in range(max(df1['frame']) + 1):
+    for i in range(max(df1['frame'])    + 1):
         bframe1 = np.zeros((650, 650, 3), np.uint8)
         bframe2 = bframe1
         d1 = df1.loc[df1['frame'] == i]
@@ -151,7 +151,7 @@ def let_me_see_two_movements(df1, df2):
             break;
 
 
-'''
+
 def sincro(path):
     """
 
@@ -215,7 +215,17 @@ def sincro(path):
     c.append(c[len(c)-1])
     return c
 
+def sincro_cycle(df1,df2,path):
+    p=sincro(path)
+    tmp=np.asarray(p)
+    a=tmp[...,0]
+    b=tmp[...,1]
+    df1=df1.loc[df1['frame'].isin(a)]
+    df2 = df2.loc[df2['frame'].isin(b)]
+    return df1,df2
 
+
+'''
 def let_me_see_sicro(matrix1, matrix2, path):
     """
     Goal: show two sincro's movements

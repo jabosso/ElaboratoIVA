@@ -2,7 +2,7 @@ import pandas as pd
 import body_dictionary as body_dic
 
 body = body_dic.body()
-dict1 = ['frame', 'x', 'y', 'score']
+dict1 = ['frame','x','y','score','body_part']
 
 def matrix_to_csv(dataframe, path, name,dict=dict1):
     """

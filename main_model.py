@@ -6,6 +6,7 @@ import body_dictionary as body_dic
 from time_tools import *
 import os
 from linear_transformation import *
+from dtw import *
 
 body = body_dic.body()
 
@@ -28,11 +29,16 @@ except OSError:
 interest_point_path = path + '/interest_point.txt'
 matrix = linear_transformation(matrix)
 data = create_dataframe(matrix)
-matrix_to_csv(data, path+'/complete/', ex)
+data=data.astype(int)
 data = add_body_parts(data, body.dictionary)
+let_me_see(data)
 data = remove_not_interest_point(interest_point_path, data)
+matrix_to_csv(data, path+'/complete/', ex)
 mid_points = cycle_identify(data)
 data = generate_cycle_model(data, mid_points)
 data_model = data[0]
 
-matrix_to_csv(data_model, 'move/models/' + ex + '/cycle/', 'model',['frame','x','y','score','body_part'])
+matrix_to_csv(data_model, 'move/models/' + ex + '/cycle/', 'model')
+ #--------
+for i in range(len(data)-1):
+    dist, cost, acc, path = dtw(data_model, data[i+1])

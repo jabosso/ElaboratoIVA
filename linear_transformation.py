@@ -8,8 +8,10 @@ def body_space(body_matrix):
     :return: two tuples for max and min values on x and y
 
     """
-
+    #funziona solo se matrice ha x e y - qui frame,x,y,score
+    print(body_matrix.shape)
     max_a = np.nanmax(body_matrix, axis=1)
+    print(max_a)
     max_xy = np.nanmax(max_a, axis=0)
     min_a = np.nanmin(body_matrix, axis=1)
     min_xy = np.nanmin(min_a, axis=0)
@@ -68,16 +70,18 @@ def rotation_function(matrix, rot_ref):
     :param rot_ref: two indices of two rotation reference's landmarks
     :return: matrix with rotation's points
     """
+
     point_a = matrix[0][rot_ref[0]]
     point_b = matrix[0][rot_ref[1]]
-
-    s_y = point_a[1] - point_b[1]
-    ip = math.sqrt((point_a[0] - point_b[0]) ** 2 + (point_a[1] - point_b[1]) ** 2)
+    s_y = point_a[2] - point_b[2]
+    ip = math.sqrt((point_a[1] - point_b[1]) ** 2 + (point_a[2] - point_b[2]) ** 2)
     angle = math.asin(s_y / ip)
     for i in range(matrix.shape[0]):
         for j in range(matrix.shape[1]):
-            if (not math.isnan(matrix[i][j][0])) and (not math.isnan(matrix[i][j][0])):
+            if (not math.isnan(matrix[i][j][1])) and (not math.isnan(matrix[i][j][2])):
                 matrix[i][j] = rotate_around_point_highperf(matrix[i][j], -angle, point_a)
+    print(matrix[0][5])
+    print(matrix[0][1])
     return matrix
 
 
