@@ -1,0 +1,15 @@
+head
+neck
+dx_shoulder
+dx_elbow
+dx_hand
+sx_shoulder
+sx_elbow
+sx_hand
+pelvis
+dx_hip
+dx_knee
+dx_foot
+sx_hip
+sx_knee
+
