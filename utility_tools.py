@@ -145,7 +145,7 @@ def let_me_see_two_movements(df1, df2):
         bframe1 = body_plot(bframe1, d1)
         bframe2 = body_plot(bframe2, d2,red,tic)
         alpha = 0.7
-        risu = cv2.addWeighted(bframe1, alpha, bframe2, 1 - alpha, 0)
+        risu = cv2.addWeighted(bframe1, alpha, bframe2, 0.3 , 0)
         cv2.imshow('output', risu)
         #time.sleep(0.2)
         k = cv2.waitKey(1)
