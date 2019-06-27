@@ -41,8 +41,8 @@ def create_dataframe(matrix, dict=dict1):
     :return: dataframe without index
     """
     #print(matrix)
-
-    df = pd.DataFrame(data=matrix.reshape(-1,4), columns=dict)
+    a = len(dict)
+    df = pd.DataFrame(data=matrix.reshape(-1,a), columns=dict)
     #blankIndex = [''] * len(df)
     #df.index = blankIndex
     return df
@@ -248,8 +248,10 @@ def sincro_cycle(df1,df2,path):
     frames1 = df_t['frame']
     a =pd.unique(frames1)
     i=0
+    df_t.insert(5,'old_frame',df_t['frame'])
     for element in a :
         df_t = df_t.replace({'frame': int(element)},i)
+
         i=i+1
     frames1 = df_c['frame']
     a = pd.unique(frames1)
