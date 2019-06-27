@@ -3,11 +3,21 @@ from math import isinf
 import math
 from time_tools import *
 import body_dictionary as body_dic
-
+from scipy.spatial.distance import cosine
+import matplotlib.pyplot as plt
+from sklearn.metrics.pairwise import manhattan_distances
 
 body = body_dic.body()
 
-def dtw(x, y, warp=1, w=inf, s=5.0):
+def dist_cos(v):
+    a=[]
+    for element in v :
+        a.append(cosine(element,[1,1]))
+    return a
+
+
+
+def dtw(x, y,dist=manhattan_distances, warp=1, w= inf, s=1.0):
     """
     Computes Dynamic Time Warping (DTW) of two sequences.
     :param array x: N1*M array
@@ -27,10 +37,18 @@ def dtw(x, y, warp=1, w=inf, s=5.0):
     y = y.loc[y['body_part'] == p]
     x=x[['x','y']]
     y=y[['x','y']]
-    x=x.values
-    y=y.values
+    x1=x.values
+    y1=y.values
 
+    x = dist_cos(x1)
+    y = dist_cos(y1)
 
+    plt.plot(x)
+    plt.plot(y)
+    plt.show()
+    x = list(np.asarray(x))
+    y = list(np.asarray(y))
+    print(len(y))
     assert len(x)
     assert len(y)
     assert isinf(w) or (w >= abs(len(x) - len(y)))
@@ -45,11 +63,11 @@ def dtw(x, y, warp=1, w=inf, s=5.0):
         D0 = zeros((r + 1, c + 1))
         D0[0, 1:] = inf
         D0[1:, 0] = inf
-    D1 = D0[1:, 1:]
+    D1 = D0[1:, 1:]  # view
     for i in range(r):
         for j in range(c):
             if (isinf(w) or (max(0, i - w) <= j <= min(c, i + w))):
-                D1[i, j] = D1[i, j] + math.sqrt((x[i][0] - y[j][0]) ** 2 + (x[i][1] - y[j][1]) ** 2)
+                D1[i, j] = dist(x[i], y[j])
     C = D1.copy()
     jrange = range(c)
     for i in range(r):
@@ -68,7 +86,52 @@ def dtw(x, y, warp=1, w=inf, s=5.0):
         path = range(len(x)), zeros(len(x))
     else:
         path = _traceback(D0)
+
+
     return D1[-1, -1] / sum(D1.shape), C, D1, path
+
+def my_dtw(x, y):
+    p = choosen_point(x)
+    keys = list(body.dictionary.keys())
+    val = list(body.dictionary.values())
+    index = keys[val.index(p)]
+
+    x = x.loc[x['body_part'] == p]
+    y = y.loc[y['body_part'] == p]
+    x = x[['x', 'y']]
+    y = y[['x', 'y']]
+    x1 = x.values
+    y1 = y.values
+
+    x = dist_cos(x1)
+    y = dist_cos(y1)
+
+    plt.plot(x)
+    plt.plot(y)
+    plt.show()
+    x = np.asarray(x)
+    y = np.asarray(y)
+    d= np.zeros((x.shape[0],y.shape[0]))
+    for i in range(x.shape[0]):
+        d[i][0] =math.fabs(x[i]-y[0])
+    for i in range(y.shape[0]):
+        d[0][i] = math.fabs(x[0] - y[i])
+    for i in range(1,x.shape[0]):
+            for j in range(1,y.shape[0]):
+                d[i][j]= math.fabs(x[i]-y[j])+ min(3*d[i-1,j-1],
+                                                   d[i-1,j],
+                                                   d[i,j-1])
+    print(d[0:10][0:10])
+    path = _traceback(d)
+    p_n = np.asarray(path)
+    plt.plot(p_n)
+    plt.show()
+    return p_n
+
+
+
+
+
 
 
 def _traceback(D):

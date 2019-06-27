@@ -4,7 +4,7 @@ import time
 import math
 import numpy as np
 import body_dictionary as body_dic
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from csv_tools import *
 import pandas as pd
 
@@ -160,6 +160,22 @@ def sincro(path):
     :param path: path returned by dtw() to temporally align two videos
     :return: list of couple of frame's index
     """
+    f = np.asarray(path)
+    f = f.transpose()
+    f = f[19:]
+
+    c =[]
+    old_A  = -1
+    old_B = -1
+    for i in range(f.shape[0]):
+        if (old_A != f[i][0]) and (old_B != f[i][1]):
+            coppia = f[i]
+            old_A = f[i][0]
+            old_B = f[i][1]
+            c.append(coppia)
+
+
+    '''
     npath = np.asarray(path)
     index = -1
     old = 0
@@ -214,7 +230,8 @@ def sincro(path):
                 c.append([path[0][b[h]], path[1][b[h]]])
                 old = b[h]
     c.append(c[len(c)-1])
-    c.append(c[len(c)-1])
+    c.append(c[len(c)-1])'''
+
     return c
 
 def sincro_cycle(df1,df2,path):
@@ -222,9 +239,30 @@ def sincro_cycle(df1,df2,path):
     tmp=np.asarray(p)
     a=tmp[...,0]
     b=tmp[...,1]
-    df1=df1.loc[df1['frame'].isin(a)]
-    df2 = df2.loc[df2['frame'].isin(b)]
-    return df1,df2
+
+    for i in range(len(b)):
+        b[i]=b[i]+df2.iloc[0].frame
+    for i in range(len(b)):
+        a[i]=a[i]+df1.iloc[0].frame
+    df_t=df1.loc[df1['frame'].isin(a)]
+    df_c = df2.loc[df2['frame'].isin(b)]
+
+    frames1 = df_t['frame']
+    a =pd.unique(frames1)
+    print(len(a))
+    i=0
+    for element in a :
+        df_t = df_t.replace({'frame': int(element)},i)
+        i=i+1
+    frames1 = df_c['frame']
+    a = pd.unique(frames1)
+    i = 0
+    for element in a :
+        df_c = df_c.replace({'frame': int(element)},i)
+        i=i+1
+    print(df_t)
+    print(df_c)
+    return df_t,df_c
 
 
 '''
@@ -274,8 +312,8 @@ def visualize(cost, path, x, y):
     #plt.ylabel('y')
     #plt.axis('tight')
     plt.show()
-
 '''
+
 
 
 def get_model(exercise):
