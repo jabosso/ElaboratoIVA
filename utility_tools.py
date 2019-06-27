@@ -101,7 +101,7 @@ def let_me_see(df):
             break;
 
 
-def body_plot(blank_frame, block_frame):
+def body_plot(blank_frame, block_frame,color=[0,255,255],tic =4):
     """
     Goal: plot the body of one frame
 
@@ -121,7 +121,7 @@ def body_plot(blank_frame, block_frame):
             _ = d_B['body_part'].item()
             point_a = (d_A.x.item(), d_A.y.item())
             point_b = (d_B.x.item(), d_B.y.item())
-            cv2.line(blank_frame, point_a, point_b, [0,255,255], 4)
+            cv2.line(blank_frame, point_a, point_b, color, tic)
         except:
             _ = ''
     return blank_frame
@@ -140,12 +140,14 @@ def let_me_see_two_movements(df1, df2):
         bframe2 = bframe1
         d1 = df1.loc[df1['frame'] == i]
         d2 = df2.loc[df2['frame'] == i]
+        red =[0,0,255]
+        tic = 7
         bframe1 = body_plot(bframe1, d1)
-        bframe2 = body_plot(bframe2, d2)
-        alpha = 0.3
-        cv2.addWeighted(bframe2, alpha, bframe1, 1 - alpha, 0, bframe1)
-        cv2.imshow('output', bframe1)
-        time.sleep(0.2)
+        bframe2 = body_plot(bframe2, d2,red,tic)
+        alpha = 0.7
+        risu = cv2.addWeighted(bframe1, alpha, bframe2, 1 - alpha, 0)
+        cv2.imshow('output', risu)
+        #time.sleep(0.2)
         k = cv2.waitKey(1)
         if k == 27:
             break;

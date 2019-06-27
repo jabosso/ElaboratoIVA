@@ -9,9 +9,8 @@ def body_space(body_matrix):
 
     """
     #funziona solo se matrice ha x e y - qui frame,x,y,score
-    print(body_matrix.shape)
+    body_matrix = body_matrix[:,:,[1,2]]
     max_a = np.nanmax(body_matrix, axis=1)
-    print(max_a)
     max_xy = np.nanmax(max_a, axis=0)
     min_a = np.nanmin(body_matrix, axis=1)
     min_xy = np.nanmin(min_a, axis=0)
@@ -29,9 +28,9 @@ def scale_function(matrix, box_dim):
     for i in range(matrix.shape[0]):
         for j in range(matrix.shape[1]):
             if not math.isnan(matrix[i][j][0]):
-                matrix[i][j][0] = int((matrix[i][j][0] / box_dim) * new_dimension)
-            if not math.isnan(matrix[i][j][1]):
                 matrix[i][j][1] = int((matrix[i][j][1] / box_dim) * new_dimension)
+            if not math.isnan(matrix[i][j][1]):
+                matrix[i][j][2] = int((matrix[i][j][2] / box_dim) * new_dimension)
     return matrix
 
 
@@ -57,9 +56,9 @@ def shift_function(matrix, max_xy, min_xy):
     for i in range(matrix.shape[0]):
         for j in range(matrix.shape[1]):
             if not math.isnan(matrix[i][j][0]):
-                matrix[i][j][0] = matrix[i][j][0] - shift_x
+                matrix[i][j][1] = matrix[i][j][1] - shift_x
             if not math.isnan(matrix[i][j][1]):
-                matrix[i][j][1] = matrix[i][j][1] - shift_y
+                matrix[i][j][2] = matrix[i][j][2] - shift_y
     return matrix, box_dim
 
 
