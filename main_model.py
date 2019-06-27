@@ -29,7 +29,9 @@ except OSError:
 interest_point_path = path + '/interest_point.txt'
 matrix = linear_transformation(matrix)
 data = create_dataframe(matrix)
-data=data.astype(int)
+data=data['frame'].astype(int)
+data=data['x'].astype(int)
+data=data['y'].astype(int)
 data = add_body_parts(data, body.dictionary)
 let_me_see(data)
 data = remove_not_interest_point(interest_point_path, data)
