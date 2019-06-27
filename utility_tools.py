@@ -239,17 +239,14 @@ def sincro_cycle(df1,df2,path):
     tmp=np.asarray(p)
     a=tmp[...,0]
     b=tmp[...,1]
-
     for i in range(len(b)):
         b[i]=b[i]+df2.iloc[0].frame
     for i in range(len(b)):
         a[i]=a[i]+df1.iloc[0].frame
     df_t=df1.loc[df1['frame'].isin(a)]
     df_c = df2.loc[df2['frame'].isin(b)]
-
     frames1 = df_t['frame']
     a =pd.unique(frames1)
-    print(len(a))
     i=0
     for element in a :
         df_t = df_t.replace({'frame': int(element)},i)
@@ -260,8 +257,6 @@ def sincro_cycle(df1,df2,path):
     for element in a :
         df_c = df_c.replace({'frame': int(element)},i)
         i=i+1
-    print(df_t)
-    print(df_c)
     return df_t,df_c
 
 

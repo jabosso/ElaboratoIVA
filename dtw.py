@@ -121,7 +121,6 @@ def my_dtw(x, y):
                 d[i][j]= math.fabs(x[i]-y[j])+ min(3*d[i-1,j-1],
                                                    d[i-1,j],
                                                    d[i,j-1])
-    print(d[0:10][0:10])
     path = _traceback(d)
     p_n = np.asarray(path)
     plt.plot(p_n)
