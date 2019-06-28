@@ -55,8 +55,9 @@ def statistic(model, secondary):
         dica =dica.dropna()
         r= q.index[q['frame']== i]
         for j in range(len(r)-1):
-            print(r[j])
-            q.set_value(r[j],'variance',dica[j])
-    #print(q)
+            i =r[j]
+            value = dica[j]
+            q.at[i,'variance']= value
+
 
 

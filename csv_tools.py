@@ -24,6 +24,5 @@ def csv_to_matrix(name):
     :return: dataframe
     """
     df = pd.read_csv(name)
-    # dict = df.columns.to_list()
-    # print(dict)
+
     return df  # , dict

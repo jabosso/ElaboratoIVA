@@ -15,22 +15,6 @@ color = [(255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0
          (128, 0, 255), (255, 0, 255), (255, 0, 128), (255, 0, 64), (0, 128, 255), (0, 230, 0), (128, 0, 255),
          (251, 49, 229), (255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0), (0, 128, 255),
          (255, 128, 0), (128, 0, 255), (255, 0, 255), (255, 0, 128)]
-'''
-def matrix_to_csv(matrix, name_file):
-    """
-    :param matrix: matrix to convert in file csv
-    :param name_file: part of name file csv
-    """
-    with open('move/models/'+ name_file +'/model.csv', mode='w') as employee_file:
-        employee_writer = csv.writer(employee_file, delimiter=',', quoting=csv.QUOTE_NONE)
-        for i in range(matrix.shape[0]):
-            for j in range(matrix.shape[1]):
-                employee_writer.writerow(int(matrix[i][j]))
-
-
-
-'''
-
 
 def create_dataframe(matrix, dict=dict1):
     """
@@ -40,7 +24,6 @@ def create_dataframe(matrix, dict=dict1):
     :param dict: name of columns [M] -default:['frame','x','y','score']
     :return: dataframe without index
     """
-    #print(matrix)
     a = len(dict)
     df = pd.DataFrame(data=matrix.reshape(-1,a), columns=dict)
     #blankIndex = [''] * len(df)
@@ -173,65 +156,6 @@ def sincro(path):
             old_A = f[i][0]
             old_B = f[i][1]
             c.append(coppia)
-
-
-    '''
-    npath = np.asarray(path)
-    index = -1
-    old = 0
-    a = []
-    b = []
-    c = []
-    for i in range(npath.shape[1]):
-        if old == npath[0][i]:
-            index = index + 1
-        else:
-            a.append(index)
-            old = npath[0][i]
-            index = index + 1
-    a.append(index)
-    index = -1
-    old = 0
-
-    for i in range(npath.shape[1]):
-        if old == npath[1][i]:
-            index = index + 1
-        else:
-            b.append(index)
-            old = npath[1][i]
-            index = index + 1
-    b.append(index)
-    i = 0
-    old = -1
-
-    while (i < len(a) and i < len(b)):
-        if a[i] > b[i]:
-            if b[i] > old:
-                c.append([path[0][a[i]], path[1][a[i]]])
-                old = a[i]
-            i = i + 1
-        elif a[i] < b[i]:
-            if a[i] > old:
-                c.append([path[0][b[i]], path[1][b[i]]])
-                old = b[i]
-            i = i + 1
-        else:
-            c.append([path[0][b[i]], path[1][b[i]]])
-            old = b[i]
-            i = i + 1
-    if len(a) > len(b):
-        for h in range(i, len(a)):
-            if a[h]> old :
-                c.append([path[0][a[h]], path[1][a[h]]])
-                old = a[h]
-    elif len(a) < len(b):
-        for h in range(i, len(b)):
-            if b[h]> old:
-                c.append([path[0][b[h]], path[1][b[h]]])
-                old = b[h]
-    c.append(c[len(c)-1])
-    c.append(c[len(c)-1])'''
-
     return c
 
 def sincro_cycle(df1,df2,path):
@@ -263,34 +187,6 @@ def sincro_cycle(df1,df2,path):
 
 
 '''
-def let_me_see_sicro(matrix1, matrix2, path):
-    """
-    Goal: show two sincro's movements
-    :param matrix1: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
-    :param matrix2: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
-    :param path: list of couple of frame's index
-    """
-    for i in range(len(path)):
-        bframe = np.zeros((650, 650, 3), np.uint8)
-        overlay = bframe
-        k = path[i][0]
-        l = path[i][1]
-        for j in range(matrix1.shape[1]):
-            x = int(matrix1[k][j][0])
-            y = int(matrix1[k][j][1])
-            cv2.circle(overlay, (x, y), 5, (255, 0, 0), -1)
-        for j in range(matrix2.shape[1]):
-            x = int(matrix2[l][j][0])
-            y = int(matrix2[l][j][1])
-            cv2.circle(overlay, (x, y), 5, (0, 255, 0), -1)
-        alpha = 0.3
-        cv2.addWeighted(overlay, alpha, bframe, 1 - alpha, 0, bframe)
-        time.sleep(0.5)
-        cv2.imshow('output', bframe)
-        time.sleep(0.5)
-        k = cv2.waitKey(1)
-        if k == 27:
-            break;
 
 
 def visualize(cost, path, x, y):
