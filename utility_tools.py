@@ -40,11 +40,15 @@ def add_body_parts(df, body_part):
     :return:dataframe with new column of body's parts
     """
     bp = []
-    l = math.ceil(len(df) / 15)  # ritorna l'intero superiore
+    n_dot = len(body_part)
+    n_columns= df.shape[1]
+    l = math.ceil(len(df) / n_dot)  # ritorna l'intero superiore
     for i in range(l):
-        for j in range(15):
+        for j in range(n_dot):
             bp.append(body_part[j])
-    df.insert(4,'body_part',bp)
+            #print('fatto',j)
+    df.insert(n_columns,'body_part',bp)
+    #print(df)
     return df
 
 

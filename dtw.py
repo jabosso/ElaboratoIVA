@@ -92,6 +92,7 @@ def dtw(x, y,dist=manhattan_distances, warp=1, w= inf, s=1.0):
 
 def my_dtw(x, y):
     p = choosen_point(x)
+
     keys = list(body.dictionary.keys())
     val = list(body.dictionary.values())
     index = keys[val.index(p)]
@@ -123,8 +124,8 @@ def my_dtw(x, y):
                                                    d[i,j-1])
     path = _traceback(d)
     p_n = np.asarray(path)
-    plt.plot(p_n)
-    plt.show()
+    #plt.plot(p_n)
+    #plt.show()
     return p_n
 
 

@@ -60,7 +60,7 @@ def calcolo_vect_medio(my_list,dim_v):
     a = my_list[0]
     vect = np.zeros((dim_v, 2))
     for j in range(dim_v):
-        tmp =a.iloc[0]
+        tmp =a.iloc[j]
         vect[j][0] += tmp.x
         vect[j][1] += tmp.y
     for j in range(shape2):
@@ -75,8 +75,8 @@ def calcolo_vect_medio(my_list,dim_v):
         except:
             _ = 0
     for j in range(dim_v) :
-        vect[j][0] = vect[j][0]/count
-        vect[j][1] = vect[j][1] / count
+        vect[j][0] = vect[j][0]/(count)
+        vect[j][1] = vect[j][1] / (count)
     return vect
 
 def distance_cos(v,dim):
@@ -155,7 +155,9 @@ dat_v =pd.DataFrame(t_g,columns=['frame'])
 dat_v['x']=t_vv[...,0]
 dat_v['y']=t_vv[...,1]
 dat_v['frame'].astype(int)
-matrix_to_csv(dat_v,'move/models/prova/cycle/','mean',['frame','x','y'])
+dict2 = pd.unique(my_list[0].body_part)
+data_v = add_body_parts(dat_v,dict2)
+matrix_to_csv(dat_v,'move/models/prova/cycle/','mean',['frame','x','y','body_part'])
 
 
 
