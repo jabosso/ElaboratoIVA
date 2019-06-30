@@ -7,6 +7,7 @@ import body_dictionary as body_dic
 import matplotlib.pyplot as plt
 from csv_tools import *
 import pandas as pd
+from statistic import *
 
 body = body_dic.body()
 dict1 = ['frame', 'x', 'y', 'score']
@@ -30,7 +31,6 @@ def create_dataframe(matrix, dict=dict1):
     #df.index = blankIndex
     return df
 
-
 def add_body_parts(df, body_part):
     """
     Goal: add new column to dataframe containing body's parts
@@ -51,7 +51,6 @@ def add_body_parts(df, body_part):
     #print(df)
     return df
 
-
 def remove_not_interest_point(int_path, data):
     """
     Goal: delete not interest point in data
@@ -70,7 +69,6 @@ def remove_not_interest_point(int_path, data):
             data.drop(i, inplace=True)
     return data
 
-
 def let_me_see(df):
     """
     Goal: show the movement of the person
@@ -87,7 +85,6 @@ def let_me_see(df):
         if k == 27:
             break;
 
-
 def body_plot(blank_frame, block_frame,color=[0,255,255],tic =4):
     """
     Goal: plot the body of one frame
@@ -99,7 +96,7 @@ def body_plot(blank_frame, block_frame,color=[0,255,255],tic =4):
     x = block_frame['x']
     y = block_frame['y']
     for j in range(x.shape[0]):
-        cv2.circle(blank_frame, (x.iloc[j], y.iloc[j]), 5, [255, 0, 0], -1)
+        cv2.circle(blank_frame, (x.iloc[j], y.iloc[j]), 5, color, -1)
     for el in body.connection:
         d_A = block_frame.loc[block_frame['body_part'] == body.dictionary[el[0]]]
         d_B = block_frame.loc[block_frame['body_part'] == body.dictionary[el[1]]]
@@ -112,7 +109,6 @@ def body_plot(blank_frame, block_frame,color=[0,255,255],tic =4):
         except:
             _ = ''
     return blank_frame
-
 
 def let_me_see_two_movements(df1, df2):
     """
@@ -138,8 +134,6 @@ def let_me_see_two_movements(df1, df2):
         k = cv2.waitKey(1)
         if k == 27:
             break;
-
-
 
 def sincro(path):
     """
@@ -189,7 +183,6 @@ def sincro_cycle(df1,df2,path):
         i=i+1
     return df_t,df_c
 
-
 '''
 
 
@@ -223,3 +216,87 @@ def get_model(exercise):
     #     for row in reader:
     #         weight.append(row)
     return model, weight
+
+def normalize_dataFrame(data):
+    data['frame'] = data['frame'].astype(int)
+    data['x'] = data['x'].astype(int)
+    data['y'] = data['y'].astype(int)
+    return data
+
+def load_matched_frame(data, model, i, list, shape):
+    my_list = []
+    shift = model.iloc[0].frame
+
+    my_list.append(model.loc[model['frame'] == i + shift])
+
+    for j in range(shape):
+        try:
+            current_df = data[j + 1]
+            current_frame = list[i][j] + current_df.iloc[0].frame
+
+            my_list.append(current_df.loc[current_df['frame'] == current_frame])
+        except:
+            _ = 0
+    return my_list
+
+def mean_vector(list,dim, shape):#shape2 my_list dim_v
+    count = 1
+    a = list[0]
+    vect = np.zeros((dim, 2))
+    for j in range(dim):
+        tmp = a.iloc[j]
+        vect[j][0] += tmp.x
+        vect[j][1] += tmp.y
+    for j in range(shape):
+        try:
+            a = list[j + 1]
+            b = a.iloc[0].frame
+            count = count + 1
+            for h in range(dim):
+                tmp = a.iloc[h]
+                vect[h][0] = vect[h][0] + tmp.x
+                vect[h][1] = vect[h][1] + tmp.y
+        except:
+            _ = 0
+    for j in range(dim):
+        vect[j][0] = vect[j][0] / (count)
+        vect[j][1] = vect[j][1] / (count)
+    return vect
+
+def distance_cosine(v,dim):
+    m_dist = []
+    for j in range(dim - 2):
+        try:
+            current_connection = body.connection[j + 1]
+            current_dependency = body.dependency[j + 1]
+            dependency_connection = body.connection[current_dependency]
+            point_A = v[current_connection[0]]
+            point_B = v[current_connection[1]]
+            main_vector = vec(point_A, point_B)
+            point_A = v[dependency_connection[0]]
+            point_B = v[dependency_connection[1]]
+            dependency_vector = vec(point_A, point_B)
+            m_dist.append(cosine(main_vector, dependency_vector))
+            # print(m_dist)
+        except:
+            _ = 0
+    return m_dist
+
+def vector_load(df, dim):
+    v = np.zeros((dim, 2))
+
+    for j in range(dim):
+        tmp = df.iloc[j]
+        v[j][0] = tmp.x
+        v[j][1] = tmp.y
+    return v
+
+def calculate_variance(distances,dim):
+    n = len(distances)
+    somma = np.zeros(dim-2)
+    for i in range(n):
+        for j in range(dim-2) :
+            somma[j] = somma[j] + (distances[0][j]-distances[i][j])**2
+    for i in range(dim-2):
+        somma[i] = math.sqrt(somma[i]/n)
+    return somma

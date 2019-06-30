@@ -30,7 +30,7 @@ def video_to_matrix(src):
                 dataout.append(istanza)
         else :
             k = 27
-        cv2.imshow("prova", datum.cvOutputData)
+        cv2.imshow("Elaborazione Video", datum.cvOutputData)
         if k != 27 :
             k = cv2.waitKey(1)
         j = j + 1
