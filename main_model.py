@@ -43,7 +43,6 @@ data_model = data[0]
 
 matrix_to_csv(data_model, 'move/models/' + ex + '/cycle/', 'model')
  #--------
-#for i in range(len(data)-1):
-    #dist, cost, acc, path = dtw(data_model, data[i+1])
+
 
 

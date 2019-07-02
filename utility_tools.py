@@ -69,6 +69,23 @@ def remove_not_interest_point(int_path, data):
             data.drop(i, inplace=True)
     return data
 
+def get_interest_point(int_path):
+    interest = []
+    key_interest=[]
+    temp = open(int_path, 'r')
+    for elem in temp:
+        interest.append(elem.replace('\n', ''))
+    print(interest)
+    keys = list(body.dictionary.keys())
+    val = list(body.dictionary.values())
+    for label in interest:
+        l=keys[val.index(label)]
+        key_interest.append(l)
+    return key_interest
+
+
+
+
 def let_me_see(df):
     """
     Goal: show the movement of the person
@@ -143,7 +160,12 @@ def sincro(path):
     """
     f = np.asarray(path)
     f = f.transpose()
-    f = f[19:]
+    count_n =0
+    i=0
+    while (f[i][0]<0) or (f[i][1]<0):
+        count_n+=1
+        i+=1
+    f=f[count_n:,...]
 
     c =[]
     old_A  = -1
@@ -233,16 +255,15 @@ def load_matched_frame(data, model, i, list, shape):
         try:
             current_df = data[j + 1]
             current_frame = list[i][j] + current_df.iloc[0].frame
-
             my_list.append(current_df.loc[current_df['frame'] == current_frame])
         except:
             _ = 0
     return my_list
 
-def mean_vector(list,dim, shape):#shape2 my_list dim_v
+def mean_vector(list,dim, shape):
     count = 1
     a = list[0]
-    vect = np.zeros((dim, 2))
+    vect = np.zeros((dim, 2)) #7X2
     for j in range(dim):
         tmp = a.iloc[j]
         vect[j][0] += tmp.x
@@ -250,7 +271,7 @@ def mean_vector(list,dim, shape):#shape2 my_list dim_v
     for j in range(shape):
         try:
             a = list[j + 1]
-            b = a.iloc[0].frame
+            b = a.iloc[0].frame #shift
             count = count + 1
             for h in range(dim):
                 tmp = a.iloc[h]
@@ -258,31 +279,53 @@ def mean_vector(list,dim, shape):#shape2 my_list dim_v
                 vect[h][1] = vect[h][1] + tmp.y
         except:
             _ = 0
+            print('non si è associato il ciclo ', j+1)
+
     for j in range(dim):
         vect[j][0] = vect[j][0] / (count)
         vect[j][1] = vect[j][1] / (count)
+
     return vect
 
-def distance_cosine(v,dim):
+def distance_cosine(v,dim,i_index):
+    """
+
+    :param v: matrix [interest point*2]
+    :param dim: number of interest point
+    :param i_index: correspondendt keys of interest point
+    :return:
+    """
     m_dist = []
-    for j in range(dim - 2):
+
+
+    for j in range(dim-1):
         try:
-            current_connection = body.connection[j + 1]
-            current_dependency = body.dependency[j + 1]
+            current_connection = body.connection[i_index[j]]
+            current_dependency = body.dependency[i_index[j]]
             dependency_connection = body.connection[current_dependency]
-            point_A = v[current_connection[0]]
-            point_B = v[current_connection[1]]
-            main_vector = vec(point_A, point_B)
-            point_A = v[dependency_connection[0]]
-            point_B = v[dependency_connection[1]]
-            dependency_vector = vec(point_A, point_B)
-            m_dist.append(cosine(main_vector, dependency_vector))
-            # print(m_dist)
+            if  (dependency_connection[0] in i_index) and (dependency_connection[1] in i_index):
+                a_index =i_index.index(current_connection[0])
+                b_index = i_index.index(current_connection[1])
+                point_A = v[a_index]
+                point_B = v[b_index]
+                main_vector = vec(point_A, point_B)
+                a_index = i_index.index(dependency_connection[0])
+                b_index = i_index.index(dependency_connection[1])
+                point_A = v[a_index]
+                point_B = v[b_index]
+                dependency_vector = vec(point_A, point_B)
+                m_dist.append(cosine(main_vector, dependency_vector))
         except:
             _ = 0
     return m_dist
 
 def vector_load(df, dim):
+    """
+
+    :param df: frame
+    :param dim: number of interest point
+    :return: vextor with field x and y
+    """
     v = np.zeros((dim, 2))
 
     for j in range(dim):
@@ -292,11 +335,42 @@ def vector_load(df, dim):
     return v
 
 def calculate_variance(distances,dim):
+    """
+
+    :param distances:
+    :param dim:
+    :return: variance
+    """
     n = len(distances)
-    somma = np.zeros(dim-2)
-    for i in range(n):
-        for j in range(dim-2) :
-            somma[j] = somma[j] + (distances[0][j]-distances[i][j])**2
-    for i in range(dim-2):
-        somma[i] = math.sqrt(somma[i]/n)
+    #print('distances: ', distances)
+    #print('n: ', n)
+    somma = np.zeros(dim)
+    med = np.zeros(dim)
+    for j in range(dim):
+        for i in range(n-1):
+            med[j]= med[j]+distances[i+1][j]
+        med[j]= med[j]/(n-1)
+
+    #print(med)
+    for i in range(n-1):
+        for j in range(dim) :
+            somma[j] = somma[j] + (med[j]-distances[i+1][j])**2
+    for i in range(dim):
+        somma[i] = math.sqrt(somma[i]/(n-1))
+    #print(somma)
     return somma
+
+def calcutate_med_distance(distances, dim):
+    """
+
+    :param distances: matrix [1+number_of_cycle*interest_point]
+    :param dim: number element in any array of distances
+    :return: mean
+    """
+    n = len(distances)
+    med = np.zeros(dim)
+    for j in range(dim):
+        for i in range(n - 1):
+            med[j] = med[j] + distances[i + 1][j]
+        med[j] = med[j] / (n - 1)
+    return med

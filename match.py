@@ -26,8 +26,8 @@ print(type_exercise)
 #args = vars(ap.parse_args())
 #print("{}".format(args["exercise"]))
 #ex = args["exercise"]
-ex= 'arms'
-vid_na = 'data/giovi_con.mp4'
+ex= 'Arms2'
+vid_na = 'data/model_arm.mp4'
 interest_path = 'move/models/' + ex + '/interest_point.txt'
 
 model_path = 'move/models/'+ex+'/cycle/mean.csv'
@@ -35,7 +35,7 @@ mean_model = csv_to_matrix(model_path)
 mean_model['frame']= mean_model['frame'].astype((int))
 mean_model['x']= mean_model['x'].astype(int)
 mean_model['y']= mean_model['y'].astype(int)
-
+interest_index = get_interest_point(interest_path)
 #model, model_w = get_model(ex)
 # mostra a video il tipo di esercizio da fare
 #let_me_see(mean_model)
@@ -55,7 +55,9 @@ data['frame']=data['frame'].astype(int)
 data['x']=data['x'].astype(int)
 data['y']=data['y'].astype(int)
 mid_points = cycle_identify(data)
+
 data_c = generate_cycle_model(data, mid_points)
+
 shape1 = len(pd.unique(mean_model['frame']))
 shape2 = len(data_c)
 list_p = np.full((shape1,shape2),np.inf)
@@ -70,17 +72,22 @@ fontColor              = (255,0,255)
 
 for i in range(shape2):
     path = dtw(mean_model,data_c[i] )
+
     p = sincro(path)
+
     for element in p :
+
         j = element[0]
         value_ = element[1]+data_c[i].iloc[0].frame
         list_p[j][i] = value_
 tmp = pd.unique(mean_model['body_part'])
 dim_v = len(tmp)
 variance_w =csv_to_matrix('move/models/'+ex+'/cycle/variance.csv')
+medium_cs = csv_to_matrix('move/models/'+ex+'/cycle/medium.csv')
 color1= [0,0,255]
 color2 = [0,255,0]
 for i in range(shape2):
+    total_score = 0
     print('lavoro su ciclo',i)
     elenco=[]
     current_cycle = data_c[i]
@@ -91,23 +98,26 @@ for i in range(shape2):
     for elemento in elenco:
         f_u = current_cycle.loc[current_cycle['frame']==elemento[1]]
         v_u = vector_load(f_u,dim_v)
-        distance_user =distance_cosine(v_u,dim_v)
+        distance_user =distance_cosine(v_u,dim_v,interest_index)
         f_m = mean_model.loc[mean_model['frame']==elemento[0]]
         v_m = vector_load(f_m,dim_v)
-        distance_model =distance_cosine(v_m,dim_v)
+        distance_model =distance_cosine(v_m,dim_v,interest_index)
         current_variance = variance_w.loc[variance_w['frame']==elemento[0]]
+
+        current_medium = medium_cs.loc[medium_cs['frame'] == elemento[0]]
         varia = current_variance['variance']
-        print(distance_model)
-        print(distance_user)
-        print(varia)
+
+        medium_dist = current_medium['medium_dist']
         result = np.zeros((len(varia)))
         check = np.zeros(((len(varia))))
+
         for i in range(len(varia)):
-            result[i] = math.fabs(distance_user[i]-distance_model[i])
-            if (result[i]<varia.iloc[i]) or (result[i]== varia.iloc[i]) :
+            result[i] = math.fabs(distance_user[i]-medium_dist.iloc[i])
+
+            if (round(result[i],3)<round(varia.iloc[i],3)) or (round(result[i],3)== round(varia.iloc[i],3)) :
                 check[i]=1
-        print(result)
-        print(check)
+        for element in check:
+            total_score = total_score+element
         bframe = np.zeros((650,650,3),np.uint8)
         bframe = body_plot(bframe,f_m,color1)
         bframe = body_plot(bframe, f_u, color2)
@@ -118,10 +128,11 @@ for i in range(shape2):
                     fontColor)
         cv2.imshow('confronto',bframe)
         k = cv2.waitKey(1)
-        time.sleep(1)
+        time.sleep(0.3)
         if k == 27:
             break;
-
+    total_score= total_score/(len(varia)*len(elenco))
+    print('la precisione del ciclo  è ',total_score)
 
 
 

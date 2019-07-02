@@ -56,9 +56,7 @@ def cycle_identify(dataframe):
     temp.append(dist.shape[1])
 
     midpoints = []
-    print(len(temp))
     for i in range(1, len(temp), 2):
-        print(i)
         midpoints.append((temp[i-1 ] + temp[i]) / 2)
     return midpoints
 

@@ -77,8 +77,14 @@ def rotation_function(matrix, rot_ref):
     angle = math.asin(s_y / ip)
     for i in range(matrix.shape[0]):
         for j in range(matrix.shape[1]):
-            if (not math.isnan(matrix[i][j][1])) and (not math.isnan(matrix[i][j][2])):
+            print(matrix[i][j])
+            #if (not math.isnan(matrix[i][j][1])) and (not math.isnan(matrix[i][j][2])):
+            if ( not matrix[i][j][1] is None) and ( not matrix[i][j][2] is None):
                 matrix[i][j] = rotate_around_point_highperf(matrix[i][j], -angle, point_a)
+            else:
+                matrix[i][j][1] = matrix[i-1][j][1]
+                matrix[i][j][2] = matrix[i-1][j - 15][2]
+                matrix[i][j][3] = matrix[i-1][j][3]
     return matrix
 
 

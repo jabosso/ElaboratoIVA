@@ -2,6 +2,9 @@ import pyopenpose as op
 import cv2
 import numpy as np
 
+
+
+
 def video_to_matrix(src):
     params = dict()
     params["model_folder"] = "models/"
@@ -28,9 +31,11 @@ def video_to_matrix(src):
                 else:
                     istanza = [j, x, y, score]
                 dataout.append(istanza)
+
         else :
             k = 27
         cv2.imshow("Elaborazione Video", datum.cvOutputData)
+
         if k != 27 :
             k = cv2.waitKey(1)
         j = j + 1
