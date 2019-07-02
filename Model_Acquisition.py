@@ -47,13 +47,13 @@ data = generate_cycle_model(data, mid_points)
 data_model = data[0]
 #-----------------------------------------------------------------------------------------------------
 
-shape1 = len(pd.unique(data_model['frame']))
-shape2 = len(data)
-list_p = np.full((shape1,shape2-1),np.inf)
+shape1 = len(pd.unique(data_model['frame']))#number frames of data_model
+shape2 = len(data) #number cycle
+list_p = np.full((shape1,shape2-1),np.inf) #conterrà sincronizzazioni su ogni ciclo
 for i in range(shape2-1):
     path = dtw(data_model, data[i+1])
     p = sincro(path)
-    for element in p :
+    for element in p:
         j = element[0]
         value_ = element[1]
         list_p[j][i] = value_
@@ -64,11 +64,11 @@ total_f = []
 total_vv = []
 med_cs=[]
 for i in range(shape1):
-    distances =[]
-    my_list = load_matched_frame(data, data_model,i, list_p, shape2-1)
-    dim_v = my_list[0].shape[0] #numero di interesrt point
+    distances =[] #vector of cosine distances
+    my_list = load_matched_frame(data, data_model, i, list_p, shape2-1)
+    dim_v = my_list[0].shape[0] #numero di interest point
     vect = mean_vector(my_list,dim_v, shape2-1)
-    distances.append(distance_cosine(vect,dim_v,interest_index))
+    distances.append(distance_cosine(vect,dim_v,interest_index)) #mean distance cosine
     n_distances=len(distances[0]) #number of distances calculated on single frames
     total_vv.append(vect)
     for j in range(len(my_list)):

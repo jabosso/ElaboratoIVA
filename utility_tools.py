@@ -70,6 +70,12 @@ def remove_not_interest_point(int_path, data):
     return data
 
 def get_interest_point(int_path):
+    """
+    Goal: return key correspondent of the interest points
+
+    :param int_path: path of file txt containing the interst points
+    :return: vector with keys correspondent of the interest points
+    """
     interest = []
     key_interest=[]
     temp = open(int_path, 'r')
@@ -229,23 +235,37 @@ def visualize(cost, path, x, y):
 
 
 def get_model(exercise):
-    # weight =[]
-    # interest_path = 'move/models/'+exercise+'/interest_point.txt'
+    """
+    :param exercise: name of exercise into video
+    :return: model and weight
+    """
     model = csv_to_matrix('move/models/' + exercise + '/cycle/model.csv')
     weight = csv_to_matrix('move/models/' + exercise + '/cycle/weight.csv')
-    # with open('move/models/'+exercise+'/weight.csv', 'r') as fin:
-    #     reader = csv.reader(fin)
-    #     for row in reader:
-    #         weight.append(row)
+
     return model, weight
 
 def normalize_dataFrame(data):
+    """
+
+    :param data: dataframe
+    :return: dataframe with integer components: 'frame','x' and 'y'
+    """
     data['frame'] = data['frame'].astype(int)
     data['x'] = data['x'].astype(int)
     data['y'] = data['y'].astype(int)
     return data
 
 def load_matched_frame(data, model, i, list, shape):
+    """
+    Goal: create list containing matched frames with model
+
+    :param data: dataframe with any cycle into column
+    :param model: dataframe with cycle 0 -model
+    :param i: number frame
+    :param list: list containing synchronizations of each cycle with model [number_frame_data_model*number cycle-1]
+    :param shape: number of cycle less the model
+    :return: list containing matched frame of any cycle(included model) with model
+    """
     my_list = []
     shift = model.iloc[0].frame
 
@@ -261,6 +281,12 @@ def load_matched_frame(data, model, i, list, shape):
     return my_list
 
 def mean_vector(list,dim, shape):
+    """
+    :param list: ist containing matched frame of any cycle with model
+    :param dim: number of interest points
+    :param shape: number of cycle less the model
+    :return: vector with mean of x and y points
+    """
     count = 1
     a = list[0]
     vect = np.zeros((dim, 2)) #7X2
@@ -292,18 +318,16 @@ def distance_cosine(v,dim,i_index):
 
     :param v: matrix [interest point*2]
     :param dim: number of interest point
-    :param i_index: correspondendt keys of interest point
-    :return:
+    :param i_index: correspondent keys of interest point
+    :return: vector with cosine distances
     """
     m_dist = []
-
-
     for j in range(dim-1):
         try:
             current_connection = body.connection[i_index[j]]
             current_dependency = body.dependency[i_index[j]]
             dependency_connection = body.connection[current_dependency]
-            if  (dependency_connection[0] in i_index) and (dependency_connection[1] in i_index):
+            if (dependency_connection[0] in i_index) and (dependency_connection[1] in i_index):
                 a_index =i_index.index(current_connection[0])
                 b_index = i_index.index(current_connection[1])
                 point_A = v[a_index]
@@ -322,9 +346,9 @@ def distance_cosine(v,dim,i_index):
 def vector_load(df, dim):
     """
 
-    :param df: frame
+    :param df: frames of a cycle
     :param dim: number of interest point
-    :return: vextor with field x and y
+    :return: vector with field x and y
     """
     v = np.zeros((dim, 2))
 
@@ -344,7 +368,7 @@ def calculate_variance(distances,dim):
     n = len(distances)
     #print('distances: ', distances)
     #print('n: ', n)
-    somma = np.zeros(dim)
+    variance = np.zeros(dim)
     med = np.zeros(dim)
     for j in range(dim):
         for i in range(n-1):
@@ -354,11 +378,11 @@ def calculate_variance(distances,dim):
     #print(med)
     for i in range(n-1):
         for j in range(dim) :
-            somma[j] = somma[j] + (med[j]-distances[i+1][j])**2
+            variance[j] = variance[j] + (med[j]-distances[i+1][j])**2
     for i in range(dim):
-        somma[i] = math.sqrt(somma[i]/(n-1))
-    #print(somma)
-    return somma
+        variance[i] = math.sqrt(variance[i]/(n-1))
+    #print(variance)
+    return variance
 
 def calcutate_med_distance(distances, dim):
     """
