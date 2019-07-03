@@ -4,8 +4,8 @@ import math
 from time_tools import *
 import body_dictionary as body_dic
 from scipy.spatial.distance import cosine
-import matplotlib.pyplot as plt
-from sklearn.metrics.pairwise import manhattan_distances
+#import matplotlib.pyplot as plt
+#from sklearn.metrics.pairwise import manhattan_distances
 
 body = body_dic.body()
 

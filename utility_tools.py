@@ -4,7 +4,7 @@ import time
 import math
 import numpy as np
 import body_dictionary as body_dic
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from csv_tools import *
 import pandas as pd
 from statistic import *
@@ -141,7 +141,7 @@ def let_me_see_two_movements(df1, df2):
     :param df2:dataframe of person 2[frame;x;y;score;body_part]
 
     """
-    for i in range(max(df1['frame'])    + 1):
+    for i in range(max(df1['frame'])+ 1):
         bframe1 = np.zeros((650, 650, 3), np.uint8)
         bframe2 = bframe1
         d1 = df1.loc[df1['frame'] == i]
@@ -149,7 +149,7 @@ def let_me_see_two_movements(df1, df2):
         red =[0,0,255]
         tic = 7
         bframe1 = body_plot(bframe1, d1)
-        bframe2 = body_plot(bframe2, d2,red,tic)
+        bframe2 = body_plot(bframe2, d2,red,tic=6)
         alpha = 0.7
         risu = cv2.addWeighted(bframe1, alpha, bframe2, 0.3 , 0)
         cv2.imshow('output', risu)
@@ -255,6 +255,31 @@ def normalize_dataFrame(data):
     data['y'] = data['y'].astype(int)
     return data
 
+def shifted(data,n):
+    """
+    Goal: shift the frames
+
+    :param data: dataframe of cycle
+    :param n: number of body part
+    :return: dataframe with index wich start from 0 and fram
+    """
+    shape = data.shape[0]
+    new_index=[]
+    for i in range(shape):
+        new_index.append(i)
+    data2 = data.reindex(new_index)
+    for i in range(shape):
+        data2.iloc[i]=data.iloc[i]
+    total=[]
+    for i in range(shape//n):
+        total.append(np.full(n, i))
+    total = np.asarray(total)
+    total = total.reshape((-1))
+    data2['frame']=total
+
+    return data2
+
+
 def load_matched_frame(data, model, i, list, shape):
     """
     Goal: create list containing matched frames with model
@@ -267,51 +292,17 @@ def load_matched_frame(data, model, i, list, shape):
     :return: list containing matched frame of any cycle(included model) with model
     """
     my_list = []
-    shift = model.iloc[0].frame
-
-    my_list.append(model.loc[model['frame'] == i + shift])
+    my_list.append(model.loc[model['frame'] == i])
 
     for j in range(shape):
         try:
             current_df = data[j + 1]
-            current_frame = list[i][j] + current_df.iloc[0].frame
+            current_frame = list[i][j]
             my_list.append(current_df.loc[current_df['frame'] == current_frame])
         except:
             _ = 0
+
     return my_list
-
-def mean_vector(list,dim, shape):
-    """
-    :param list: ist containing matched frame of any cycle with model
-    :param dim: number of interest points
-    :param shape: number of cycle less the model
-    :return: vector with mean of x and y points
-    """
-    count = 1
-    a = list[0]
-    vect = np.zeros((dim, 2)) #7X2
-    for j in range(dim):
-        tmp = a.iloc[j]
-        vect[j][0] += tmp.x
-        vect[j][1] += tmp.y
-    for j in range(shape):
-        try:
-            a = list[j + 1]
-            b = a.iloc[0].frame #shift
-            count = count + 1
-            for h in range(dim):
-                tmp = a.iloc[h]
-                vect[h][0] = vect[h][0] + tmp.x
-                vect[h][1] = vect[h][1] + tmp.y
-        except:
-            _ = 0
-            print('non si è associato il ciclo ', j+1)
-
-    for j in range(dim):
-        vect[j][0] = vect[j][0] / (count)
-        vect[j][1] = vect[j][1] / (count)
-
-    return vect
 
 def distance_cosine(v,dim,i_index):
     """
@@ -358,43 +349,41 @@ def vector_load(df, dim):
         v[j][1] = tmp.y
     return v
 
-def calculate_variance(distances,dim):
+def calculate_variance(distances,dim,med_distance,istance):
     """
 
-    :param distances:
-    :param dim:
-    :return: variance
+    :param distances: cosine distances
+    :param dim: number element in any array of distances
+    :param med_distance: mean distances
+    :param istance: number of frame
+    :return: max variance
     """
+    print('n')
+    print(distances)
     n = len(distances)
-    #print('distances: ', distances)
-    #print('n: ', n)
     variance = np.zeros(dim)
-    med = np.zeros(dim)
-    for j in range(dim):
-        for i in range(n-1):
-            med[j]= med[j]+distances[i+1][j]
-        med[j]= med[j]/(n-1)
-
-    #print(med)
-    for i in range(n-1):
+    old=np.zeros((dim))
+    for i in range(n):
         for j in range(dim) :
-            variance[j] = variance[j] + (med[j]-distances[i+1][j])**2
-    for i in range(dim):
-        variance[i] = math.sqrt(variance[i]/(n-1))
-    #print(variance)
+
+            if old[j] <math.fabs((med_distance[istance][j] - distances[i][j])):
+                old[j]=math.fabs(med_distance[istance][j] - distances[i][j])
+        variance=old
     return variance
 
 def calcutate_med_distance(distances, dim):
     """
+    GOAL:calculate mean cosine distance on any cycle for ant frame and any interest point
 
-    :param distances: matrix [1+number_of_cycle*interest_point]
+    :param distances: matrix [number_of_cycle*interest_point]
     :param dim: number element in any array of distances
     :return: mean
     """
     n = len(distances)
     med = np.zeros(dim)
     for j in range(dim):
-        for i in range(n - 1):
-            med[j] = med[j] + distances[i + 1][j]
-        med[j] = med[j] / (n - 1)
+        for i in range(n):
+            med[j] = med[j] + distances[i ][j]
+        med[j] = med[j] / (n)
     return med
+
