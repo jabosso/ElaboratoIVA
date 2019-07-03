@@ -81,7 +81,7 @@ def get_interest_point(int_path):
     temp = open(int_path, 'r')
     for elem in temp:
         interest.append(elem.replace('\n', ''))
-    print(interest)
+    #print(interest)
     keys = list(body.dictionary.keys())
     val = list(body.dictionary.values())
     for label in interest:
@@ -358,14 +358,12 @@ def calculate_variance(distances,dim,med_distance,istance):
     :param istance: number of frame
     :return: max variance
     """
-    print('n')
-    print(distances)
+
     n = len(distances)
     variance = np.zeros(dim)
     old=np.zeros((dim))
     for i in range(n):
         for j in range(dim) :
-
             if old[j] <math.fabs((med_distance[istance][j] - distances[i][j])):
                 old[j]=math.fabs(med_distance[istance][j] - distances[i][j])
         variance=old

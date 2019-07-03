@@ -124,7 +124,6 @@ for i in range(shape2):
             result[i] = math.fabs(distance_user[i]-medium_dist.iloc[i])
             if (round(result[i],3)<round(varia.iloc[i],3)) or (round(result[i],3)== round(varia.iloc[i],3)) :
                 check[i]=1
-            else:#controlla se è peggiore degli altri valori
 
         for element in check:
             total_score = total_score+element
@@ -141,7 +140,7 @@ for i in range(shape2):
         time.sleep(0.3)
         if k == 27:
             break;
-    total_score= total_score/(len(varia)*len(elenco))
+    total_score= total_score/(len(varia)*len(vect))
     print('la precisione del ciclo  è ',total_score)
 
 
