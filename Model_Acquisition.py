@@ -7,56 +7,56 @@ import os
 from linear_transformation import linear_transformation
 from dtw import dtw
 
+flag_sampling = True
 body = body_dic.body()
-# app = argparse.ArgumentParser()
-# app.add_argument("-v", "--video", required=True, help="insert video")
-# app.add_argument("-e", "--exercise", required=True, help="insert type of video exercise")
-# args = vars(app.parse_args())
-# exercise = args['exercise']
-# input_video = args['video']
-# print('You choose '+exercise+ ' as exercise')
-# print('You choose '+input_video+' as model video to acquire')
-# #--------------------------------------------------------------------------------------------------
-#
-# path = 'move/models/' + exercise
-# try:
-#     os.mkdir(path )
-# except OSError:
-#     print('creation of directory failed')
-# try:
-#     os.makedirs(path +'/complete' )
-#     os.mkdir(path + '/cycle')
-# except OSError:
-#     print('creation of directory failed')
-# #--------------------------------------------------------------------------------------------------
-#
-# matrix = video_to_matrix(args["video"])
+app = argparse.ArgumentParser()
+app.add_argument("-v", "--video", required=True, help="insert video")
+app.add_argument("-e", "--exercise", required=True, help="insert type of video exercise")
+args = vars(app.parse_args())
+exercise = args['exercise']
+input_video = args['video']
 
-# matrix = linear_transformation(matrix)
-# data = create_dataframe(matrix)
-# data = normalize_dataFrame(data)
-# data = add_body_parts(data, body.dictionary)
-# data = remove_not_interest_point(interest_point_path, data)
-# matrix_to_csv(data, path+'/complete/', exercise)
-
-#------- Add Gio
-exercise='Arms2'
-path='move/models/'+exercise
-data=csv_to_matrix(path+'/complete/Arms2.csv')
+path = 'move/models/' + exercise
+try:
+    os.mkdir(path)
+except OSError:
+    print('creation of directory failed')
+try:
+    os.makedirs(path + '/complete')
+    os.mkdir(path + '/cycle')
+except OSError:
+    print('creation of directory failed')
+# #--------------------------------------------------------------------------------------------------
+matrix, total, fps = video_to_matrix(args["video"])
 interest_point_path = path + '/interest_point.txt'
+matrix = linear_transformation(matrix)
+data = create_dataframe(matrix)
+data = normalize_dataFrame(data)
+data = add_body_parts(data, body.dictionary)
+data = remove_not_interest_point(interest_point_path, data)
+matrix_to_csv(data, path + '/complete/', exercise)
 
-#--------End
+path = 'move/models/' + exercise
+
 
 
 interest_index = get_interest_point(interest_point_path)
 #---------------------------------------------------------------------------------------------------
 
 mid_points = cycle_identify(data)
+total = total[int(mid_points[0]):int(mid_points[1])]
+
 data = generate_cycle_model(data, mid_points)
 n_body= len(pd.unique(data[0].body_part))
 for i in range(len(data)):
     data[i]=shifted(data[i],n_body)
     data[i]=normalize_dataFrame(data[i])
+# -----sampling-------
+    if flag_sampling :
+        data[i] = sampling(data[i])
+        data[i] = shifted(data[i], n_body)
+
+    # -----------
 data_model = data[0]
 
 #-----------------------------------------------------------------------------------------------------

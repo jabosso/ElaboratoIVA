@@ -1,4 +1,4 @@
-#import pyopenpose as op
+import pyopenpose as op
 import cv2
 import numpy as np
 
@@ -6,12 +6,14 @@ import numpy as np
 
 
 def video_to_matrix(src):
+    total=[]
     params = dict()
     params["model_folder"] = "models/"
     opWrapper = op.WrapperPython()
     opWrapper.configure(params)
     opWrapper.start()
     cap = cv2.VideoCapture(src)
+    fps=float(cap.get(5))
     datum = op.Datum()
     j = 0
     data_main = []
@@ -35,11 +37,11 @@ def video_to_matrix(src):
         else :
             k = 27
         cv2.imshow("Elaborazione Video", datum.cvOutputData)
-
+        total.append(datum.cvOutputData)
         if k != 27 :
             k = cv2.waitKey(1)
         j = j + 1
         if k == 27:
             break;
         data_main.append(dataout)
-    return np.asarray(data_main)
+    return np.asarray(data_main), total, fps

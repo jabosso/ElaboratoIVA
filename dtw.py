@@ -4,15 +4,17 @@ import math
 from time_tools import *
 import body_dictionary as body_dic
 from scipy.spatial.distance import cosine
-#import matplotlib.pyplot as plt
-#from sklearn.metrics.pairwise import manhattan_distances
+
+# import matplotlib.pyplot as plt
+# from sklearn.metrics.pairwise import manhattan_distances
 
 body = body_dic.body()
 
+
 def dist_cos(v):
-    a=[]
-    for element in v :
-        a.append(cosine(element,[1,1]))
+    a = []
+    for element in v:
+        a.append(cosine(element, [1, 1]))
     return a
 
 
@@ -39,30 +41,22 @@ def dtw(x, y):
     x = dist_cos(x1)
     y = dist_cos(y1)
 
-    #plt.plot(x)    #plt.plot(y)    #plt.show()
-
     x = np.asarray(x)
     y = np.asarray(y)
-    d= np.zeros((x.shape[0],y.shape[0]))
+    d = np.zeros((x.shape[0], y.shape[0]))
     for i in range(x.shape[0]):
-        d[i][0] =math.fabs(x[i]-y[0])
+        d[i][0] = math.fabs(x[i] - y[0])
     for i in range(y.shape[0]):
         d[0][i] = math.fabs(x[0] - y[i])
-    for i in range(1,x.shape[0]):
-            for j in range(1,y.shape[0]):
-                d[i][j]= math.fabs(x[i]-y[j])+ min(3*d[i-1,j-1],
-                                                   d[i-1,j],
-                                                   d[i,j-1])
+    for i in range(1, x.shape[0]):
+        for j in range(1, y.shape[0]):
+            d[i][j] = math.fabs(x[i] - y[j]) + min(3 * d[i - 1, j - 1],
+                                                   d[i - 1, j],
+                                                   d[i, j - 1])
     path = _traceback(d)
     p_n = np.asarray(path)
 
-    #plt.plot(p_n)    #plt.show()
     return p_n
-
-
-
-
-
 
 
 def _traceback(D):

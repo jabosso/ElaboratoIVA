@@ -4,7 +4,7 @@ import time
 import math
 import numpy as np
 import body_dictionary as body_dic
-#import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from csv_tools import *
 import pandas as pd
 from statistic import *
@@ -12,10 +12,6 @@ from statistic import *
 body = body_dic.body()
 dict1 = ['frame', 'x', 'y', 'score']
 
-color = [(255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0), (0, 128, 255), (255, 128, 0),
-         (128, 0, 255), (255, 0, 255), (255, 0, 128), (255, 0, 64), (0, 128, 255), (0, 230, 0), (128, 0, 255),
-         (251, 49, 229), (255, 0, 0), (251, 49, 229), (106, 49, 229), (255, 255, 0), (64, 255, 0), (0, 128, 255),
-         (255, 128, 0), (128, 0, 255), (255, 0, 255), (255, 0, 128)]
 
 def create_dataframe(matrix, dict=dict1):
     """
@@ -26,10 +22,9 @@ def create_dataframe(matrix, dict=dict1):
     :return: dataframe without index
     """
     a = len(dict)
-    df = pd.DataFrame(data=matrix.reshape(-1,a), columns=dict)
-    #blankIndex = [''] * len(df)
-    #df.index = blankIndex
+    df = pd.DataFrame(data=matrix.reshape(-1, a), columns=dict)
     return df
+
 
 def add_body_parts(df, body_part):
     """
@@ -41,15 +36,14 @@ def add_body_parts(df, body_part):
     """
     bp = []
     n_dot = len(body_part)
-    n_columns= df.shape[1]
+    n_columns = df.shape[1]
     l = math.ceil(len(df) / n_dot)  # ritorna l'intero superiore
     for i in range(l):
         for j in range(n_dot):
             bp.append(body_part[j])
-            #print('fatto',j)
-    df.insert(n_columns,'body_part',bp)
-    #print(df)
+    df.insert(n_columns, 'body_part', bp)
     return df
+
 
 def remove_not_interest_point(int_path, data):
     """
@@ -69,6 +63,7 @@ def remove_not_interest_point(int_path, data):
             data.drop(i, inplace=True)
     return data
 
+
 def get_interest_point(int_path):
     """
     Goal: return key correspondent of the interest points
@@ -77,19 +72,21 @@ def get_interest_point(int_path):
     :return: vector with keys correspondent of the interest points
     """
     interest = []
-    key_interest=[]
+    key_interest = []
     temp = open(int_path, 'r')
     for elem in temp:
         interest.append(elem.replace('\n', ''))
-    #print(interest)
+    # print(interest)
     keys = list(body.dictionary.keys())
     val = list(body.dictionary.values())
     for label in interest:
-        l=keys[val.index(label)]
+        l = keys[val.index(label)]
         key_interest.append(l)
     return key_interest
 
 
+def SecondSort(val):
+    return val[1]
 
 
 def let_me_see(df):
@@ -103,12 +100,12 @@ def let_me_see(df):
         block_frame = df.loc[df['frame'] == i]
         bframe = body_plot(bframe, block_frame)
         cv2.imshow('output', bframe)
-        #time.sleep(0.1)
         k = cv2.waitKey(1)
         if k == 27:
             break;
 
-def body_plot(blank_frame, block_frame,color=[0,255,255],tic =4):
+
+def body_plot(blank_frame, block_frame, color=[0, 255, 255], tic=4):
     """
     Goal: plot the body of one frame
 
@@ -133,6 +130,7 @@ def body_plot(blank_frame, block_frame,color=[0,255,255],tic =4):
             _ = ''
     return blank_frame
 
+
 def let_me_see_two_movements(df1, df2):
     """
     Goal: show the movement of two person simultaneously
@@ -141,22 +139,22 @@ def let_me_see_two_movements(df1, df2):
     :param df2:dataframe of person 2[frame;x;y;score;body_part]
 
     """
-    for i in range(max(df1['frame'])+ 1):
+    for i in range(max(df1['frame']) + 1):
         bframe1 = np.zeros((650, 650, 3), np.uint8)
         bframe2 = bframe1
         d1 = df1.loc[df1['frame'] == i]
         d2 = df2.loc[df2['frame'] == i]
-        red =[0,0,255]
+        red = [0, 0, 255]
         tic = 7
         bframe1 = body_plot(bframe1, d1)
-        bframe2 = body_plot(bframe2, d2,red,tic=6)
+        bframe2 = body_plot(bframe2, d2, red, tic=6)
         alpha = 0.7
-        risu = cv2.addWeighted(bframe1, alpha, bframe2, 0.3 , 0)
+        risu = cv2.addWeighted(bframe1, alpha, bframe2, 0.3, 0)
         cv2.imshow('output', risu)
-        #time.sleep(0.2)
         k = cv2.waitKey(1)
         if k == 27:
             break;
+
 
 def sincro(path):
     """
@@ -166,15 +164,15 @@ def sincro(path):
     """
     f = np.asarray(path)
     f = f.transpose()
-    count_n =0
-    i=0
-    while (f[i][0]<0) or (f[i][1]<0):
-        count_n+=1
-        i+=1
-    f=f[count_n:,...]
+    count_n = 0
+    i = 0
+    while (f[i][0] < 0) or (f[i][1] < 0):
+        count_n += 1
+        i += 1
+    f = f[count_n:, ...]
 
-    c =[]
-    old_A  = -1
+    c = []
+    old_A = -1
     old_B = -1
     for i in range(f.shape[0]):
         if (old_A != f[i][0]) and (old_B != f[i][1]):
@@ -184,54 +182,33 @@ def sincro(path):
             c.append(coppia)
     return c
 
-def sincro_cycle(df1,df2,path):
-    p=sincro(path)
-    tmp=np.asarray(p)
-    a=tmp[...,0]
-    b=tmp[...,1]
+
+def sincro_cycle(df1, df2, path):
+    p = sincro(path)
+    tmp = np.asarray(p)
+    a = tmp[..., 0]
+    b = tmp[..., 1]
     for i in range(len(b)):
-        b[i]=b[i]+df2.iloc[0].frame
+        b[i] = b[i] + df2.iloc[0].frame
     for i in range(len(b)):
-        a[i]=a[i]+df1.iloc[0].frame
-    df_t=df1.loc[df1['frame'].isin(a)]
+        a[i] = a[i] + df1.iloc[0].frame
+    df_t = df1.loc[df1['frame'].isin(a)]
     df_c = df2.loc[df2['frame'].isin(b)]
     frames1 = df_t['frame']
-    a =pd.unique(frames1)
-    i=0
-    df_t.insert(5,'old_frame',df_t['frame'])
-    for element in a :
-        df_t = df_t.replace({'frame': int(element)},i)
+    a = pd.unique(frames1)
+    i = 0
+    df_t.insert(5, 'old_frame', df_t['frame'])
+    for element in a:
+        df_t = df_t.replace({'frame': int(element)}, i)
 
-        i=i+1
+        i = i + 1
     frames1 = df_c['frame']
     a = pd.unique(frames1)
     i = 0
-    for element in a :
-        df_c = df_c.replace({'frame': int(element)},i)
-        i=i+1
-    return df_t,df_c
-
-'''
-
-
-def visualize(cost, path, x, y):
-    """
-    :param cost: cost returned by dtw()
-    :param path: path returned by dtw()
-    :param x: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
-    :param y: matrix of body landmarks with dim=[Nframes, Nlandmarks,(x,y)]
-    """
-    plt.imshow(cost.T, origin='lower', cmap=plt.cm.Reds, interpolation='nearest')
-
-    plt.plot(path[0], path[1], '-o')  # relation
-    #plt.xticks(range(len(x)), x)
-    #plt.yticks(range(len(y)), y)
-    #plt.xlabel('x')
-    #plt.ylabel('y')
-    #plt.axis('tight')
-    plt.show()
-'''
-
+    for element in a:
+        df_c = df_c.replace({'frame': int(element)}, i)
+        i = i + 1
+    return df_t, df_c
 
 
 def get_model(exercise):
@@ -244,6 +221,7 @@ def get_model(exercise):
 
     return model, weight
 
+
 def normalize_dataFrame(data):
     """
 
@@ -255,7 +233,8 @@ def normalize_dataFrame(data):
     data['y'] = data['y'].astype(int)
     return data
 
-def shifted(data,n):
+
+def shifted(data, n):
     """
     Goal: shift the frames
 
@@ -264,18 +243,18 @@ def shifted(data,n):
     :return: dataframe with index wich start from 0 and fram
     """
     shape = data.shape[0]
-    new_index=[]
+    new_index = []
     for i in range(shape):
         new_index.append(i)
     data2 = data.reindex(new_index)
     for i in range(shape):
-        data2.iloc[i]=data.iloc[i]
-    total=[]
-    for i in range(shape//n):
+        data2.iloc[i] = data.iloc[i]
+    total = []
+    for i in range(shape // n):
         total.append(np.full(n, i))
     total = np.asarray(total)
     total = total.reshape((-1))
-    data2['frame']=total
+    data2['frame'] = total
 
     return data2
 
@@ -304,7 +283,8 @@ def load_matched_frame(data, model, i, list, shape):
 
     return my_list
 
-def distance_cosine(v,dim,i_index):
+
+def distance_cosine(v, dim, i_index):
     """
 
     :param v: matrix [interest point*2]
@@ -313,13 +293,13 @@ def distance_cosine(v,dim,i_index):
     :return: vector with cosine distances
     """
     m_dist = []
-    for j in range(dim-1):
+    for j in range(dim - 1):
         try:
             current_connection = body.connection[i_index[j]]
             current_dependency = body.dependency[i_index[j]]
             dependency_connection = body.connection[current_dependency]
             if (dependency_connection[0] in i_index) and (dependency_connection[1] in i_index):
-                a_index =i_index.index(current_connection[0])
+                a_index = i_index.index(current_connection[0])
                 b_index = i_index.index(current_connection[1])
                 point_A = v[a_index]
                 point_B = v[b_index]
@@ -333,6 +313,7 @@ def distance_cosine(v,dim,i_index):
         except:
             _ = 0
     return m_dist
+
 
 def vector_load(df, dim):
     """
@@ -349,7 +330,8 @@ def vector_load(df, dim):
         v[j][1] = tmp.y
     return v
 
-def calculate_variance(distances,dim,med_distance,istance):
+
+def calculate_variance(distances, dim, med_distance, istance):
     """
 
     :param distances: cosine distances
@@ -361,13 +343,14 @@ def calculate_variance(distances,dim,med_distance,istance):
 
     n = len(distances)
     variance = np.zeros(dim)
-    old=np.zeros((dim))
+    old = np.zeros((dim))
     for i in range(n):
-        for j in range(dim) :
-            if old[j] <math.fabs((med_distance[istance][j] - distances[i][j])):
-                old[j]=math.fabs(med_distance[istance][j] - distances[i][j])
-        variance=old
+        for j in range(dim):
+            if old[j] < math.fabs((med_distance[istance][j] - distances[i][j])):
+                old[j] = math.fabs(med_distance[istance][j] - distances[i][j])
+        variance = old
     return variance
+
 
 def calcutate_med_distance(distances, dim):
     """
@@ -381,7 +364,96 @@ def calcutate_med_distance(distances, dim):
     med = np.zeros(dim)
     for j in range(dim):
         for i in range(n):
-            med[j] = med[j] + distances[i ][j]
+            med[j] = med[j] + distances[i][j]
         med[j] = med[j] / (n)
     return med
 
+
+font = cv2.FONT_HERSHEY_SIMPLEX
+bottomLeftCornerOfText1 = (200, 50)
+bottomLeftCornerOfText2 = (50, 450)
+fontScale = 1
+fontColor = (255, 0, 255)
+
+
+def visual_worse(worse, current, model, vid, t_s):
+    a = vid[0].shape[0]
+    b = vid[0].shape[1]
+    fattore = b
+    n_h = np.zeros((650, 2, 3), np.uint8)
+    ss = 325 / 650
+    n_f = np.zeros((a, 2, 3), np.uint8)
+    s = 325 / b
+    all1 = cv2.resize(n_h, (0, 0), None, ss, .50)
+    all2 = cv2.resize(n_f, (0, 0), None, s, .50)
+    for element in worse:
+        current_d = current.loc[current['frame'] == element[0][1]]
+        current_m = model.loc[model['frame'] == element[0][0]]
+        bframe = np.zeros((650, 650, 3), np.uint8)
+        for i in range(650):
+            bframe[i][0] = [0, 0, 255]
+            bframe[0][i] = [0, 0, 255]
+            bframe[649][i] = [0, 0, 255]
+            bframe[i][649] = [0, 0, 255]
+        frame = vid[int(element[0][1])]
+        s = 325 / frame.shape[1]
+        dframe = cv2.resize(frame, (0, 0), None, s, .50)
+        bframe = body_plot(bframe, current_d, [0, 0, 255])
+        bframe = body_plot(bframe, current_m, [0, 255, 0])
+        if (element[1] < 0.02):
+            cv2.circle(bframe, (50, 600), 20, [0, 255, 0], -1)
+        else:
+            cv2.circle(bframe, (50, 600), 20, [0, 0, 255], -1)
+        image = cv2.resize(bframe, (0, 0), None, ss, ss)
+
+        all1 = np.concatenate((all1, image), axis=1)
+        all2 = np.concatenate((all2, dframe), axis=1)
+    h, w, _ = all1.shape
+    lframe = np.zeros((100, w, 3), np.uint8)
+    cv2.putText(lframe, 'Score totale del ciclo = ' + str(round(t_s, 2) * 100) + '%',
+                bottomLeftCornerOfText1,
+                font,
+                fontScale,
+                fontColor)
+    all1 = np.concatenate((lframe, all1), axis=0)
+
+    all2 = np.concatenate((all2, all1), axis=0)
+    all2 = cv2.resize(all2, (0, 0), None, .70, .70)
+    cv2.imshow('ciclo ', all2)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
+def list_cycle(total, mid):
+    listas = []
+    for i in range(len(mid) - 1):
+        ciclo = total[int(mid[i]):int(mid[i + 1])]
+        listas.append(ciclo)
+    return listas
+
+
+def sampling(data):
+    """
+
+    :param data: dataframe of cycle
+    :return: dataframe with 30% of origin frames
+    """
+    data_sampling = data.loc[data['frame'] == 0]
+    n_old_frames = len(pd.unique(data['frame']))
+    tmp = (n_old_frames * 30) / 100  # 30%
+    slice = int(n_old_frames // tmp)
+    for i in range(slice, n_old_frames, slice):
+        data_sampling = data_sampling.append(data.loc[data['frame'] == i], ignore_index=True)
+    return data_sampling
+
+
+def sampling_mat(m):
+    l = (len(m))
+    new = []
+    new.append((m[0]))
+    tmp = (l * 30) / 100  # 30%
+    slice = int(l // tmp)
+    for i in range(slice, l, slice):
+        new.append(m[i])
+
+    return new
