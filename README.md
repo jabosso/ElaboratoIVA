@@ -16,7 +16,9 @@ git clone https://github.com/jabosso/ElaboratoIVA.git
     * numpy 
     * math 
     * argparse 
-    * time<br>You can install these using pip or Anaconda
+    * time
+  
+   You can install these using pip or Anaconda
 
 ## Usage for the user
 In the Data folder you can see the types of exercises performed by your personal trainer (you have to unzip the folder to see the videos).<br>
