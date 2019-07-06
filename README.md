@@ -9,7 +9,6 @@ Installazioni necessarie:
 
 All'interno della cartella move/models è possibile trovare delle sotto cartelle contenenti i modelli per ciascuna tipologia di esercizio. All'interno di ognuna di esse vi sono delle ulteriori cartelle divise in complete e cycle ed un file interest_point.txt contenente i giunti fondamentali per quel determinato esercizio. In complete è possibile trovare il file .csv contenente tutti i frame del video modello con indicate ciascuno di essi le rispettive coordinate x,y dei giunti, lo score di accuratezza ed la label con i nomi dei giunti. In cycle, invece, sono presenti i files che caratterizzano la posa modello: model.csv contiene i frame ed i parametri dei giunti relativi alla posa iniziale, individauta come modello; medium.csv contiene i frame e le distanze coseno medie calcolate su tutte le pose, per ciascun giunto e variance.csv, con le relative varianze.
 
-
 Per la creazione di un nuovo modello è necessaria la creazione di un file .txt contenente le parti del corpo fondamentali per l'esercizio, come indicate nel file di esempio total_point.txt.
 
 Tale file deve essere inserito in una cartella che deve avere il nome relativo all'esercizio, all'interno di move/models.
