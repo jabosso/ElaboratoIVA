@@ -3,8 +3,8 @@
 
 ## Installation
 
-1.Clone and install [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)<br>
-2.Clone this repository with:
+1. Clone and install [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)<br>
+2. Clone this repository with:
 ```sh
 git clone https://github.com/jabosso/ElaboratoIVA.git 
 ```
