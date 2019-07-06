@@ -8,24 +8,22 @@
 ```sh
 git clone https://github.com/jabosso/ElaboratoIVA.git 
 ```
-3. On Ubuntu:
->you must create a symbolic link inside this folder that points to pyopenpose (library  created after installing OpenPose)
+3. On Ubuntu: you must create a symbolic link inside this folder that points to pyopenpose (library  created after installing OpenPose)
 
 4. Prerequisites for run this code:
-    *OpenCV 
-    *scipy 
-    *numpy 
-    *math 
-    *argparse 
-    *time
-You can install these using pip or Anaconda
+    * OpenCV  
+    * scipy   
+    * numpy 
+    * math 
+    * argparse 
+    * time<br>
+   You can install these using pip or Anaconda
 
 ## Usage for the user
 In the Data folder you can see the types of exercises performed by your personal trainer (you have to unzip the folder to see the videos).
 Choose your exercise and record and save your video! 
-**Recommendations**: 
-    1. Opencv does not read video metadata, a landscape shot is appropriate.
-    
+**Recommendations**:<br> 
+    1. Opencv does not read video metadata, a landscape shot is appropriate<br>
     2. Use a quality camera, the webcam is not recommended
     
 # You are curious to know how you performed the exercise?
@@ -36,9 +34,9 @@ python match.py -v >Path_of_your_video> -e <Name_of_model_exercise_>
 *Note*: <Name_of_model_exercise> is the name of the video file choose without the video extension
 
 ## How to add exercises performed by a personal trainer?
-1. Record a video and save it in the Data folder. Give a name to the file that you remember the exercise done.
-2.In the directory move/models create a folder with the name of the exercise given to the video.
-3.In the newly create folder insert a .txt file containing the parts of the body essential for the exercise. In the example file total_point.txt all parts of the body that you can insert in your .txt file are indicated.
+1. Record a video and save it in the Data folder. Give a name to the file that you remember the exercise done<br>
+2. In the directory move/models create a folder with the name of the exercise given to the video<br>
+3. In the newly create folder insert a .txt file containing the parts of the body essential for the exercise. In the example file total_point.txt all parts of the body that you can insert in your .txt file are indicated<br>
 
 To run the code for creating the model, insert to command line, inside the directory containing the files:
 ```sh
@@ -53,7 +51,7 @@ All'interno della cartella move/models è possibile trovare delle sotto cartelle
 Di default il flag per il campionamento dei cicli è settato a false, ma è possibile variarlo all'interno dei file: 'Model_Acquisition.py' e 'Match.py'.
 
 ## Requirements
-The use of a GPU is recommended for processing performed by Openpose. We used a *GTX 1060*
+The use of a GPU is recommended for processing performed by Openpose. We used a * GTX 1060 *
 
 ## Contributors
 
