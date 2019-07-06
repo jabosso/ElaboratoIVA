@@ -7,8 +7,9 @@ import os
 from linear_transformation import linear_transformation
 from dtw import dtw
 
-flag_sampling = True
+flag_sampling = False
 body = body_dic.body()
+
 app = argparse.ArgumentParser()
 app.add_argument("-v", "--video", required=True, help="insert video")
 app.add_argument("-e", "--exercise", required=True, help="insert type of video exercise")
@@ -16,6 +17,8 @@ args = vars(app.parse_args())
 exercise = args['exercise']
 input_video = args['video']
 
+#exercise = 'leg'
+#input_video= 'data/leg/leg_model.mp4'
 path = 'move/models/' + exercise
 try:
     os.mkdir(path)
@@ -27,9 +30,14 @@ try:
 except OSError:
     print('creation of directory failed')
 # #--------------------------------------------------------------------------------------------------
-matrix, total, fps = video_to_matrix(args["video"])
+matrix, total, fps = video_to_matrix(input_video)
 interest_point_path = path + '/interest_point.txt'
-matrix = linear_transformation(matrix)
+if matrix[0][1][1] is None or matrix[0][5][1] is None:
+    rot_ref =(8,12)
+else:
+    rot_ref = (1,5)
+
+matrix = linear_transformation(matrix,rot_ref)
 data = create_dataframe(matrix)
 data = normalize_dataFrame(data)
 data = add_body_parts(data, body.dictionary)

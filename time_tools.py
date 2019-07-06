@@ -2,7 +2,7 @@ import math
 import numpy as np
 from scipy.spatial.distance import cdist
 import body_dictionary as body_dic
-
+import matplotlib.pyplot as plt
 body = body_dic.body()
 
 
@@ -50,6 +50,8 @@ def cycle_identify(dataframe):
     threshold = (max + min) / 3
     temp = []
     temp.append(0)
+    plt.plot(dist[0])
+    plt.show()
     for i in range(dist.shape[1] - 1):
         if ((dist[0][i] - threshold) * (dist[0][i + 1] - threshold)) < 0:
             temp.append(i)

@@ -9,7 +9,7 @@ from dtw import dtw
 # from second_main import carico_vettore, distance_cos
 import time
 
-flag_sampling = True
+flag_sampling = False
 
 body = body_dic.body()
 # interest_path = 'move/ArmsWarmUp/interest_point.txt'
@@ -40,7 +40,12 @@ model['y'] = model['y'].astype(int)
 interest_index = get_interest_point(interest_path)
 
 matrix, total, _ = video_to_matrix(vid_na)
-user_matrix = linear_transformation(matrix)
+print(matrix.shape)
+if matrix[0][1][1] is None or matrix[0][5][1] is None:
+    rot_ref =(8,12)
+else:
+    rot_ref = (1,5)
+user_matrix = linear_transformation(matrix,rot_ref)
 data = create_dataframe(user_matrix, ['frame', 'x', 'y', 'score'])
 
 data = add_body_parts(data, body.dictionary)

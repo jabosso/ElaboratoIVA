@@ -370,9 +370,11 @@ def calcutate_med_distance(distances, dim):
 
 
 font = cv2.FONT_HERSHEY_SIMPLEX
-bottomLeftCornerOfText1 = (200, 50)
+bottomLeftCornerOfText1 = (100, 30)
+bottomLeftCornerOfText4 = (100, 60)
+bottomLeftCornerOfText3 = (100, 90)
 bottomLeftCornerOfText2 = (50, 450)
-fontScale = 1
+fontScale = 0.8
 fontColor = (255, 0, 255)
 
 
@@ -415,6 +417,16 @@ def visual_worse(worse, current, model, vid, t_s):
                 font,
                 fontScale,
                 fontColor)
+    cv2.putText(lframe, ' - PERSONAL TRAINER ' ,
+                bottomLeftCornerOfText3,
+                font,
+                fontScale,
+                [0, 255, 0])
+    cv2.putText(lframe, ' - USER ' ,
+                bottomLeftCornerOfText4,
+                font,
+                fontScale,
+                [0, 0, 255])
     all1 = np.concatenate((lframe, all1), axis=0)
 
     all2 = np.concatenate((all2, all1), axis=0)
