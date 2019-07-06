@@ -14,6 +14,7 @@ Per la creazione di un nuovo modello è necessaria la creazione di un file .txt 
 Tale file deve essere inserito in una cartella che deve avere il nome relativo all'esercizio, all'interno di move/models.
 Per avviare la creazione del modello deve essere inserito da linea di comando, all'interno della directory in cui sono contenuti i file: 
 python Model_Acquisition.py -v _Path_File_Video_ -e _Nome_Esercizio_ 
+
 Il codice è stato scritto in modo tale da acquisire solo video ripresi tramite file .mp4 e non tramite webcam, in modo tale da avere maggior qualità video ed avere così un maggior numero di frame su cui poter eseguire l'elaborazione.
 Inoltre, poichè opencv non legge i metadati del video, è opportuna una ripresa landscape.
 
