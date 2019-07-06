@@ -25,7 +25,7 @@ Choose your exercise and record and save your video!<br>
     1. Opencv does not read video metadata, a landscape shot is appropriate<br>
     2. Use a quality camera, the webcam is not recommended
     
-# You are curious to know how you performed the exercise?
+## You are curious to know how you performed the exercise?
 To run the code insert to command line, inside the directory containing the files:
 ```sh
 python match.py -v >Path_of_your_video> -e <Name_of_model_exercise_>
@@ -42,8 +42,8 @@ To run the code for creating the model, insert to command line, inside the direc
 python Model_Acquisition.py -v <Path_of_file_video> -e <Name_of_model_exercise>
 ```
 *Note*: <Name_of_model_exercise> is the name of your video file, insert into Data folder, without the video extension. This name is also the same as the folder created in move/models
-<--!
-## What's in the move folder?
+
+<--! ## What's in the move folder?
 All'interno della cartella move/models è possibile trovare delle sotto cartelle contenenti i modelli per ciascuna tipologia di esercizio. All'interno di ognuna di esse vi sono delle ulteriori cartelle divise in complete e cycle ed un file interest_point.txt contenente i giunti fondamentali per quel determinato esercizio. In complete è possibile trovare il file .csv contenente tutti i frame del video modello con indicate ciascuno di essi le rispettive coordinate x,y dei giunti, lo score di accuratezza ed la label con i nomi dei giunti. In cycle, invece, sono presenti i files che caratterizzano la posa modello: model.csv contiene i frame ed i parametri dei giunti relativi alla posa iniziale, individauta come modello; medium.csv contiene i frame e le distanze coseno medie calcolate su tutte le pose, per ciascun giunto e variance.csv, con le relative varianze. -->
 
 ## Run the code with/without sampling 
