@@ -24,8 +24,8 @@ git clone https://github.com/jabosso/ElaboratoIVA.git
 In the Data folder you can see the types of exercises performed by your personal trainer (you have to unzip the folder to see the videos).<br>
 Choose your exercise and record and save your video!<br>
 **Recommendations**:<br> 
-    1. Opencv does not read video metadata, a landscape shot is appropriate<br>
-    2. Use a quality camera, the webcam is not recommended
+  U+0020 1. Opencv does not read video metadata, a landscape shot is appropriate<br>
+  U+0020 2. Use a quality camera, the webcam is not recommended
     
 ## You are curious to know how you performed the exercise?
 To run the code insert to command line, inside the directory containing the files:
