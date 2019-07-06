@@ -1,6 +1,5 @@
 # The virtual personal trainer
 >This virtual personal trainer can help you with your rehabilitation 
-![](header.png)
 
 ## Installation
 
@@ -25,11 +24,15 @@ You can install these using pip or Anaconda
 In the Data folder you can see the types of exercises performed by your personal trainer (you have to unzip the folder to see the videos).
 Choose your exercise and record and save your video! 
 **Recommendations**: 
-    1.Opencv does not read video metadata, a landscape shot is appropriate.
-    2.Use a quality camera, the webcam is not recommended
-#You are curious to know how you performed the exercise?
+    1. Opencv does not read video metadata, a landscape shot is appropriate.
+    
+    2. Use a quality camera, the webcam is not recommended
+    
+# You are curious to know how you performed the exercise?
 To run the code insert to command line, inside the directory containing the files:
-'python match.py -v >Path_of_your_video> -e <Name_of_model_exercise_>'
+```sh
+python match.py -v >Path_of_your_video> -e <Name_of_model_exercise_>
+```
 *Note*: <Name_of_model_exercise> is the name of the video file choose without the video extension
 
 ## How to add exercises performed by a personal trainer?
@@ -38,7 +41,9 @@ To run the code insert to command line, inside the directory containing the file
 3.In the newly create folder insert a .txt file containing the parts of the body essential for the exercise. In the example file total_point.txt all parts of the body that you can insert in your .txt file are indicated.
 
 To run the code for creating the model, insert to command line, inside the directory containing the files:
-'python Model_Acquisition.py -v <Path_of_file_video> -e <Name_of_model_exercise>'
+```sh
+python Model_Acquisition.py -v <Path_of_file_video> -e <Name_of_model_exercise>
+```
 *Note*: <Name_of_model_exercise> is the name of your video file, insert into Data folder, without the video extension. This name is also the same as the folder created in move/models
 
 ## What's in the move folder?
