@@ -3,12 +3,12 @@
 
 ## Installation
 
-1.Clone and install [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
+1.Clone and install [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)<br>
 2.Clone this repository with:
 ```sh
 git clone https://github.com/jabosso/ElaboratoIVA.git 
 ```
-3. On Ubuntu: you must create a symbolic link inside this folder that points to pyopenpose (library  created after installing OpenPose)
+3. On **Ubuntu**: you must create a symbolic link inside this folder that points to pyopenpose (library  created after installing OpenPose)
 
 4. Prerequisites for run this code:
     * OpenCV  
@@ -16,12 +16,11 @@ git clone https://github.com/jabosso/ElaboratoIVA.git
     * numpy 
     * math 
     * argparse 
-    * time<br>
-   You can install these using pip or Anaconda
+    * time<br>You can install these using pip or Anaconda
 
 ## Usage for the user
-In the Data folder you can see the types of exercises performed by your personal trainer (you have to unzip the folder to see the videos).
-Choose your exercise and record and save your video! 
+In the Data folder you can see the types of exercises performed by your personal trainer (you have to unzip the folder to see the videos).<br>
+Choose your exercise and record and save your video!<br>
 **Recommendations**:<br> 
     1. Opencv does not read video metadata, a landscape shot is appropriate<br>
     2. Use a quality camera, the webcam is not recommended
@@ -43,15 +42,15 @@ To run the code for creating the model, insert to command line, inside the direc
 python Model_Acquisition.py -v <Path_of_file_video> -e <Name_of_model_exercise>
 ```
 *Note*: <Name_of_model_exercise> is the name of your video file, insert into Data folder, without the video extension. This name is also the same as the folder created in move/models
-
+<--!
 ## What's in the move folder?
-All'interno della cartella move/models è possibile trovare delle sotto cartelle contenenti i modelli per ciascuna tipologia di esercizio. All'interno di ognuna di esse vi sono delle ulteriori cartelle divise in complete e cycle ed un file interest_point.txt contenente i giunti fondamentali per quel determinato esercizio. In complete è possibile trovare il file .csv contenente tutti i frame del video modello con indicate ciascuno di essi le rispettive coordinate x,y dei giunti, lo score di accuratezza ed la label con i nomi dei giunti. In cycle, invece, sono presenti i files che caratterizzano la posa modello: model.csv contiene i frame ed i parametri dei giunti relativi alla posa iniziale, individauta come modello; medium.csv contiene i frame e le distanze coseno medie calcolate su tutte le pose, per ciascun giunto e variance.csv, con le relative varianze.
+All'interno della cartella move/models è possibile trovare delle sotto cartelle contenenti i modelli per ciascuna tipologia di esercizio. All'interno di ognuna di esse vi sono delle ulteriori cartelle divise in complete e cycle ed un file interest_point.txt contenente i giunti fondamentali per quel determinato esercizio. In complete è possibile trovare il file .csv contenente tutti i frame del video modello con indicate ciascuno di essi le rispettive coordinate x,y dei giunti, lo score di accuratezza ed la label con i nomi dei giunti. In cycle, invece, sono presenti i files che caratterizzano la posa modello: model.csv contiene i frame ed i parametri dei giunti relativi alla posa iniziale, individauta come modello; medium.csv contiene i frame e le distanze coseno medie calcolate su tutte le pose, per ciascun giunto e variance.csv, con le relative varianze. -->
 
 ## Run the code with/without sampling 
-Di default il flag per il campionamento dei cicli è settato a false, ma è possibile variarlo all'interno dei file: 'Model_Acquisition.py' e 'Match.py'.
+There is a _sampling_ flag for sampling the frames of each identified pose. By default it is set to false, but you can change it by setting it to True into files: 'Model_Acquisition.py' and 'Match.py'.
 
 ## Requirements
-The use of a GPU is recommended for processing performed by Openpose. We used a * GTX 1060 *
+The use of a GPU is recommended for processing performed by Openpose. We used a **GTX 1060**
 
 ## Contributors
 
