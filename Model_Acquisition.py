@@ -17,8 +17,6 @@ args = vars(app.parse_args())
 exercise = args['exercise']
 input_video = args['video']
 
-#exercise = 'leg'
-#input_video= 'data/leg/leg_model.mp4'
 path = 'move/models/' + exercise
 try:
     os.mkdir(path)

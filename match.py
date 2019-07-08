@@ -12,16 +12,13 @@ import time
 flag_sampling = False
 
 body = body_dic.body()
-# interest_path = 'move/ArmsWarmUp/interest_point.txt'
-# action = 'ArmsWarmUp'
+
 
 type_exercise = ['ArmsWarmUp', 'prova']
 
 ap = argparse.ArgumentParser()
 ex = 0
-# while(ex not in type_exercise):  #per eseguire un eventuale controllo
-print('Choose your exercise')
-print(type_exercise)
+
 ap.add_argument("-e", "--exercise", required=True, help='Chose exercise')
 ap.add_argument("-v", "--video", required=True, help="Video")  # user video
 args = vars(ap.parse_args())
@@ -30,7 +27,6 @@ ex = args["exercise"]  # ex= 'Arms2'
 vid_na = args['video']
 interest_path = 'move/models/' + ex + '/interest_point.txt'
 
-# model_path = 'move/models/'+ex+'/cycle/mean.csv'
 model_path = 'move/models/' + ex + '/cycle/model.csv'
 
 model = csv_to_matrix(model_path)
