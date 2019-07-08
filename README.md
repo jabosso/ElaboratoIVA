@@ -53,5 +53,5 @@ The use of a GPU is recommended for processing performed by Openpose. We used a 
 
 ## Contributors
 
-The entire project was made by [Giovanna Scaramuzzino](https://github.com/ScaramuzzinoGiovanna) and [Johan Bosso](https://github.com/jabosso)
+The entire project was made by [Giovanna Scaramuzzino](https://github.com/ScaramuzzinoGiovanna) and [Johan Andrey Bosso](https://github.com/jabosso)
 
