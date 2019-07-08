@@ -1,0 +1,7 @@
+pelvis
+dx_hip
+dx_knee
+dx_foot
+sx_hip
+sx_knee
+sx_foot
