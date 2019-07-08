@@ -8,6 +8,7 @@
 ```sh
 git clone https://github.com/jabosso/ElaboratoIVA.git 
 ```
+2.1 Download our dataset https://drive.google.com/open?id=1053dYWbOHf1AigDokQbTMU20y6-5Zxq9
 3. On **Ubuntu**: you must create a symbolic link inside this folder that points to pyopenpose (library  created after installing OpenPose)
 
 4. Prerequisites for run this code:
