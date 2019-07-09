@@ -8,7 +8,7 @@ from time_tools import *
 from dtw import dtw
 # from second_main import carico_vettore, distance_cos
 import time
-
+from Gram import *
 flag_sampling = False
 
 body = body_dic.body()
@@ -88,6 +88,7 @@ color1 = [0, 0, 255]
 color2 = [0, 255, 0]
 
 for i in range(shape2):
+    print('new')
     total_score = 0
     vect = []
     current_cycle = data_c[i]
@@ -104,6 +105,11 @@ for i in range(shape2):
         distance_user = distance_cosine(v_u, dim_v, interest_index)
         f_m = model.loc[model['frame'] == elem[0]]
         v_m = vector_load(f_m, dim_v)
+        #--------------------------------------------------------------
+
+        gram_d(v_u,v_m)
+
+        #--------------------------------------------------------------
         distance_model = distance_cosine(v_m, dim_v, interest_index)
         current_variance = variance_w.loc[variance_w['frame'] == elem[0]]
 
